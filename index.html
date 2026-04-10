@@ -469,7 +469,6 @@
 <header class="vv-header">
   <div class="inner">
     <div class="vv-logo">
-      <div class="crest">🦁</div>
       <div class="text">Statens blinklysdirektorat</div>
     </div>
   </div>
@@ -482,11 +481,6 @@
     <h2>Obligatorisk blinklysprøve</h2>
     <p class="lead">Alle førere av motorvogn er pålagt å gjennomføre en sertifisert blinklysprøve i henhold til forskrift om førerkompetanse §3-1.</p>
     <p>Prøven består av åtte (8) standardiserte kjøresituasjoner. Kandidaten skal demonstrere korrekt bruk av retningsangivere i henhold til vegtrafikkloven §11. Manglende beståelse kan medføre revurdering av førerkortets gyldighet.</p>
-
-    <div class="info-box">
-      <b>Viktig:</b> Blinklys skal aktiveres minimum tre (3) sekunder før manøveren påbegynnes.
-      <span class="ref">Jf. forskrift om kjøretøytegn §4, første ledd.</span>
-    </div>
 
     <h3>Antall forsøk</h3>
     <p>Kandidaten har <b>tre (3) forsøk</b> totalt i løpet av prøven. Ved tredje feil avbrytes prøven og kandidaten overføres til videre saksbehandling.</p>
@@ -501,22 +495,18 @@
       <div class="car-card" data-car="Vanlig bil">
         <span class="ico">🚗</span>
         <div class="name">Vanlig bil</div>
-        <div class="desc">Standard personbil</div>
       </div>
-      <div class="car-card" data-car="Stasjonsvogn">
+      <div class="car-card" data-car="Harry-bil">
         <span class="ico">🚙</span>
-        <div class="name">Stasjonsvogn</div>
-        <div class="desc">Familiekjøretøy</div>
+        <div class="name">Harry-bil</div>
       </div>
       <div class="car-card" data-car="BMW">
         <span class="ico">🏎️</span>
         <div class="name">BMW</div>
-        <div class="desc">Premiumkjøretøy</div>
       </div>
       <div class="car-card" data-car="Tesla">
         <span class="ico">⚡</span>
         <div class="name">Tesla</div>
-        <div class="desc">Premiumkjøretøy</div>
       </div>
     </div>
     <div id="premiumWarning" class="info-box danger hidden">
@@ -574,6 +564,24 @@
     <h2>Sak godkjent</h2>
     <p class="lead" id="successMsg">Manøveren ble utført korrekt i henhold til forskriftens krav.</p>
     <button class="btn primary" id="continueBtn">Neste sak</button>
+  </div>
+
+  <!-- DENIAL (when jailed) -->
+  <div id="denialPanel" class="card failure-card hidden">
+    <h2>Avslag · Kompetansebevis nektet</h2>
+    <p class="lead">Kandidaten har overskredet maksimalt antall feil og er overført til videre saksbehandling. <b>Det utstedes ikke kompetansebevis.</b></p>
+    <div class="info-box danger">
+      <b>Vedtak:</b> I henhold til forskrift om førerkompetanse §3-1, fjerde ledd, avslås søknad om kompetansebevis. Klagefristen er tre (3) uker fra mottak av dette vedtaket.
+      <span class="ref">Saksnummer: <span id="denialCaseNumber">—</span></span>
+    </div>
+    <h3>Sammendrag</h3>
+    <ul style="margin-left:20px; margin-bottom:18px;">
+      <li>Kandidat: <b id="denialName">Sjåfør</b></li>
+      <li>Kjøretøy: <b id="denialCar">—</b></li>
+      <li>Saker ikke bestått: <b id="denialFailed">0</b></li>
+      <li>Skadde / drepte: <b id="denialKilled">0</b></li>
+    </ul>
+    <button class="btn primary" id="denialRestartBtn">Søk på nytt</button>
   </div>
 
   <!-- END / CERTIFICATE -->
@@ -674,22 +682,26 @@ const CASES = [
   {
     title: 'Sak 5: Høyresving i kryss',
     expected: 'right',
-    rule: 'Trafikkreglene §13: Fører som skal svinge i kryss, skal gi tegn i god tid før manøveren. Tegnet skal være entydig og oppfattbart.',
+    rule: 'Trafikkreglene §13: Fører som skal svinge i kryss, skal gi tegn i god tid før manøveren og avvente til fotgjengerfeltet er fritt. Det er ikke tilstrekkelig at den første fotgjengeren har passert.',
     crashType: 'pedestrian',
+    obstacleClearMs: 9000,
     absurd: [
-      'En fotgjenger ventet på at du skulle vise hvor du skulle. Du viste det ved å treffe vedkommende.',
-      'Sving uten blink er ikke en sving. Det er en overraskelse.'
+      'Du var for utålmodig. Du kjørte over en dame og tre babyer.',
+      'Den første fotgjengeren rakk over. Damen med tre babyer rakk det ikke.',
+      'Du svingte rett etter at fortauet så tomt ut. Det var det ikke.'
     ],
     pathType: 'turnRight'
   },
   {
     title: 'Sak 6: Venstresving i kryss',
     expected: 'left',
-    rule: 'Trafikkreglene §13: Ved venstresving skal venstre retningsviser være aktivert i god tid, og fører skal forsikre seg om at manøveren kan utføres uten fare.',
-    crashType: 'rear',
+    rule: 'Trafikkreglene §13: Ved venstresving skal venstre retningsviser være aktivert i god tid, og fører skal forsikre seg om at fotgjengerfeltet er klart før manøveren utføres.',
+    crashType: 'pedestrian',
+    obstacleClearMs: 9000,
     absurd: [
-      'Bilen bak antok at du skulle fortsette rett frem. Det var en rimelig antakelse.',
-      'Du svingte til venstre som en hemmelighet. Hemmeligheten er ute nå.'
+      'Du var for utålmodig. Du kjørte over en dame og tre babyer.',
+      'Den første fotgjengeren rakk over. Damen med tre babyer rakk det ikke.',
+      'Du svingte rett etter at fortauet så tomt ut. Det var det ikke.'
     ],
     pathType: 'turnLeft'
   },
@@ -822,7 +834,8 @@ function easeInOut(t) {
 
 const OBSTACLE_CLEAR_MS = 5500;
 function isObstacleClear(t) {
-  return t >= OBSTACLE_CLEAR_MS;
+  const c = game.caseDef;
+  return t >= (c.obstacleClearMs || OBSTACLE_CLEAR_MS);
 }
 
 // Player car position based on case + maneuver progress
@@ -842,8 +855,9 @@ function getPlayerPos() {
       return { x: w*0.35, y: sy + (ey-sy)*e, angle: 0 };
     }
     case 'exit': {
-      const sx = w*0.35, sy = h*0.45;
-      const ex = w*0.7, ey = h*0.85;
+      // Start in the right (slow) lane of the main road, exit down the ramp
+      const sx = w*0.30, sy = h*0.575;
+      const ex = w*0.92, ey = h*0.98;
       return { x: sx + (ex-sx)*e, y: sy + (ey-sy)*e, angle: e * 0.7 };
     }
     case 'park': {
@@ -851,18 +865,45 @@ function getPlayerPos() {
       return { x: w*0.5, y: sy + (ey-sy)*e, angle: e * 0.3 };
     }
     case 'turnRight': {
-      const cx = w*0.5, sy = h*0.55;
-      const r = h*0.16;
-      const ax = cx + r;
-      const a = mp * Math.PI/2;
-      return { x: ax - r*Math.cos(a), y: sy - r*Math.sin(a), angle: -Math.PI/2 + a };
+      // Intersection at (cx, cy). Player approaches from south on vertical road.
+      // Right turn arc: from (cx+laneOff, sy) heading north to (cx+r+laneOff, cy+laneOff) heading east.
+      const cx = w*0.5, cy = h*0.45;
+      const laneOff = h*0.04;
+      const sx = cx + laneOff;     // stay in right lane of vertical road
+      const sy = cy + h*0.18;      // start position south of intersection
+      const r = sy - (cy + laneOff); // arc radius so end y matches east-road right lane
+      // Approach: drive straight up toward intersection until maneuver
+      if (game.phase === 'approach') {
+        return { x: sx, y: sy, angle: -Math.PI/2 };
+      }
+      // Arc: theta from PI to 3PI/2 (std math), tangent = theta + PI/2
+      const theta = Math.PI + mp * Math.PI/2;
+      const arcCx = sx + r;
+      const arcCy = sy;
+      return {
+        x: arcCx + Math.cos(theta) * r,
+        y: arcCy + Math.sin(theta) * r,
+        angle: theta + Math.PI/2,
+      };
     }
     case 'turnLeft': {
-      const cx = w*0.5, sy = h*0.55;
-      const r = h*0.16;
-      const ax = cx - r;
-      const a = mp * Math.PI/2;
-      return { x: ax + r*Math.cos(a), y: sy - r*Math.sin(a), angle: -Math.PI/2 - a };
+      const cx = w*0.5, cy = h*0.45;
+      const laneOff = h*0.04;
+      const sx = cx + laneOff;
+      const sy = cy + h*0.18;
+      const r = sy - (cy - laneOff); // larger radius for left turn
+      if (game.phase === 'approach') {
+        return { x: sx, y: sy, angle: -Math.PI/2 };
+      }
+      // Arc: theta from 0 to -PI/2 (std math), going CCW visually
+      const theta = 0 - mp * Math.PI/2;
+      const arcCx = sx - r;
+      const arcCy = sy;
+      return {
+        x: arcCx + Math.cos(theta) * r,
+        y: arcCy + Math.sin(theta) * r,
+        angle: theta - Math.PI/2,
+      };
     }
     case 'roundabout1': {
       const cx = w*0.5, cy = h*0.5, R = Math.min(w,h)*0.20;
@@ -1057,24 +1098,45 @@ function drawScene() {
       break;
     }
     case 'exit': {
+      // Main road
       ctx.fillStyle = '#3a3a3a';
-      ctx.fillRect(0, h*0.35, w, h*0.25);
+      ctx.fillRect(0, h*0.35, w, h*0.30);
+      // Exit ramp peeling off the bottom-right of the main road, fully connected
+      ctx.fillStyle = '#3a3a3a';
       ctx.beginPath();
-      ctx.moveTo(w*0.55, h*0.6);
-      ctx.quadraticCurveTo(w*0.75, h*0.7, w, h*0.95);
-      ctx.lineTo(w, h*1.05);
-      ctx.quadraticCurveTo(w*0.75, h*0.85, w*0.55, h*0.75);
+      // Top edge of ramp (begins where main road bottom is, curves down-right off screen)
+      ctx.moveTo(w*0.40, h*0.65);
+      ctx.bezierCurveTo(w*0.65, h*0.66, w*0.85, h*0.85, w*1.02, h*1.02);
+      // Right side off-screen
+      ctx.lineTo(w*1.02, h*1.20);
+      // Bottom edge of ramp back to start
+      ctx.bezierCurveTo(w*0.85, h*1.05, w*0.65, h*0.85, w*0.40, h*0.82);
       ctx.closePath();
       ctx.fill();
+      // Lane divider on main road (dashed) — stops before the gore point
       ctx.strokeStyle = '#fff';
       ctx.setLineDash([15, 12]);
       ctx.lineDashOffset = -scrollOffset;
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(0, h*0.475); ctx.lineTo(w, h*0.475);
+      ctx.moveTo(0, h*0.50); ctx.lineTo(w, h*0.50);
       ctx.stroke();
       ctx.setLineDash([]);
       ctx.lineDashOffset = 0;
+      // Solid white edges
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(0, h*0.35); ctx.lineTo(w, h*0.35);     // top edge of main road
+      ctx.moveTo(0, h*0.65); ctx.lineTo(w*0.40, h*0.65); // bottom edge of main road, ends at the ramp split
+      ctx.stroke();
+      // Solid edge along the inside of the ramp (gore)
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(w*0.40, h*0.65);
+      ctx.bezierCurveTo(w*0.65, h*0.66, w*0.85, h*0.85, w*1.02, h*1.02);
+      ctx.stroke();
       break;
     }
     case 'park': {
@@ -1088,12 +1150,23 @@ function drawScene() {
     }
     case 'turnRight':
     case 'turnLeft': {
+      // Roads
       ctx.fillStyle = '#3a3a3a';
       ctx.fillRect(w*0.4, 0, w*0.2, h);
       ctx.fillRect(0, h*0.35, w, h*0.2);
+      // Crosswalk on the east exit (turnRight) or west exit (turnLeft)
+      // Vertical white stripes spanning the east-west road
+      const isRight = c.pathType === 'turnRight';
+      const cwX = isRight ? w*0.61 : w*0.39 - 28;
       ctx.fillStyle = '#fff';
-      for (let i=0;i<6;i++) {
-        ctx.fillRect(w*0.4 + i*(w*0.2/6), h*0.32, w*0.18/12, 6);
+      const stripeCount = 5;
+      const stripeW = 5;
+      const stripeGap = 6;
+      const cwTop = h*0.36;
+      const cwBot = h*0.54;
+      for (let i = 0; i < stripeCount; i++) {
+        const sx2 = cwX + i*(stripeW+stripeGap);
+        ctx.fillRect(sx2, cwTop, stripeW, cwBot-cwTop);
       }
       break;
     }
@@ -1141,10 +1214,10 @@ function drawObstacle() {
       break;
     }
     case 'exit': {
-      // Car in slow lane / exit lane that needs to clear
+      // Slow car ahead in the right lane that needs to clear before player exits
       const startX = w*0.05;
       const px = startX + (t/1000) * (w*0.13);
-      drawOtherCar(px, h*0.55, 0, '#c0392b');
+      drawOtherCar(px, h*0.575, 0, '#c0392b');
       break;
     }
     case 'park': {
@@ -1156,11 +1229,28 @@ function drawObstacle() {
     }
     case 'turnRight':
     case 'turnLeft': {
-      // Pedestrian crossing the crosswalk in the intersection
-      const startX = w*0.42;
-      const endX = w*0.58;
-      const px = startX + Math.min(1, t/OBSTACLE_CLEAR_MS) * (endX - startX);
-      drawPedestrian(px, h*0.40);
+      // Crosswalk is on the east (turnRight) or west (turnLeft) exit of the intersection.
+      // Pedestrians walk vertically across it. First a single one — easy to clear.
+      // Then a woman with three babies (slow) — must wait for them too.
+      const isRight = c.pathType === 'turnRight';
+      const cwX = isRight ? w*0.66 : w*0.34;
+      const yTop = h*0.34;
+      const yBot = h*0.56;
+      // First pedestrian: walks south→north between t=0 and t=4500
+      const ped1Dur = 4500;
+      if (t <= ped1Dur + 300) {
+        const p1 = Math.min(1, t / ped1Dur);
+        const py1 = yBot + (yTop - yBot) * p1;
+        drawPedestrian(cwX, py1);
+      }
+      // Second pedestrian (woman + 3 babies): enters at t=4800, slow, finishes by t≈8800
+      const ped2Start = 4800;
+      const ped2Dur = 4000;
+      if (t >= ped2Start) {
+        const p2 = Math.min(1, (t - ped2Start) / ped2Dur);
+        const py2 = yTop + (yBot - yTop) * p2;
+        drawWomanWithBabies(cwX, py2);
+      }
       break;
     }
     case 'roundabout1':
@@ -1186,7 +1276,7 @@ function drawCar(x, y, angle) {
   let color = '#3498db';
   if (state.car === 'BMW') color = '#1a1a1a';
   if (state.car === 'Tesla') color = '#e0e0e0';
-  if (state.car === 'Stasjonsvogn') color = '#2d6a2d';
+  if (state.car === 'Harry-bil') color = '#2d6a2d';
   ctx.fillStyle = color;
   ctx.fillRect(-22, -12, 44, 24);
   ctx.fillStyle = 'rgba(150,200,255,0.6)';
@@ -1237,6 +1327,28 @@ function drawCyclist(x, y) {
   ctx.restore();
 }
 
+function drawWomanWithBabies(x, y) {
+  ctx.save();
+  // Woman: purple dress, blonde
+  ctx.fillStyle = '#f1c27d';
+  ctx.beginPath(); ctx.arc(x, y-10, 5, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#9b59b6';
+  ctx.fillRect(x-5, y-5, 10, 14);
+  ctx.fillStyle = '#1a1a1a';
+  ctx.fillRect(x-4, y+9, 3, 5);
+  ctx.fillRect(x+1, y+9, 3, 5);
+  // Three babies in a row, trailing slightly behind
+  for (let i = 0; i < 3; i++) {
+    const bx = x + (i-1)*8;
+    const by = y + 14;
+    ctx.fillStyle = '#f1c27d';
+    ctx.beginPath(); ctx.arc(bx, by-3, 3, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#ffd1dc';
+    ctx.fillRect(bx-3, by, 6, 6);
+  }
+  ctx.restore();
+}
+
 function drawStroller(x, y) {
   ctx.save();
   ctx.fillStyle = '#e91e63';
@@ -1270,11 +1382,40 @@ function drawBlinkers() {
 
 function drawCrashOverlay() {
   const w = W(), h = H();
+  const c = game.caseDef;
   if (game.crashPhase === 'crash') {
     const shakeX = (Math.random()-0.5)*10;
     const shakeY = (Math.random()-0.5)*10;
     ctx.save();
     ctx.translate(shakeX, shakeY);
+    // Gore for pedestrian / stroller crashes
+    if (c.crashType === 'pedestrian' || c.crashType === 'stroller') {
+      ctx.fillStyle = '#8b0000';
+      const cx = game.car.x, cy = game.car.y;
+      // Big blood pool under car
+      ctx.beginPath();
+      ctx.ellipse(cx, cy + 18, 38, 14, 0, 0, Math.PI*2);
+      ctx.fill();
+      // Splatter dots
+      for (let i=0;i<22;i++) {
+        const a = i*Math.PI/11 + Math.random()*0.5;
+        const dist = 20 + Math.random()*45;
+        ctx.beginPath();
+        ctx.arc(cx + Math.cos(a)*dist, cy + Math.sin(a)*dist, 2 + Math.random()*5, 0, Math.PI*2);
+        ctx.fill();
+      }
+      // Legs sticking out from under the car
+      ctx.fillStyle = '#9b59b6';
+      ctx.fillRect(cx - 18, cy + 8, 4, 14);
+      ctx.fillRect(cx - 11, cy + 8, 4, 14);
+      ctx.fillStyle = '#1a1a1a';
+      ctx.fillRect(cx - 18, cy + 22, 4, 4);
+      ctx.fillRect(cx - 11, cy + 22, 4, 4);
+      // Tiny baby bottle sideways
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(cx + 22, cy + 14, 8, 4);
+    }
+    // Yellow impact rays
     for (let i=0;i<8;i++) {
       ctx.beginPath();
       const a = i*Math.PI/4;
@@ -1289,8 +1430,8 @@ function drawCrashOverlay() {
     ctx.lineWidth = 4;
     ctx.font = 'bold 50px Impact, sans-serif';
     ctx.textAlign = 'center';
-    ctx.strokeText('KRASJ!', game.car.x, game.car.y - 30);
-    ctx.fillText('KRASJ!', game.car.x, game.car.y - 30);
+    ctx.strokeText('KRASJ!', game.car.x, game.car.y - 40);
+    ctx.fillText('KRASJ!', game.car.x, game.car.y - 40);
     ctx.restore();
   }
   if (game.crashPhase === 'wasted') {
@@ -1412,21 +1553,27 @@ function advanceCase() {
 // ============ CERTIFICATE ============
 function showCertificate() {
   document.getElementById('gamePanel').classList.add('hidden');
+  // If jailed, show denial screen instead — no certificate
+  if (state.jailed) {
+    const dp = document.getElementById('denialPanel');
+    dp.classList.remove('hidden');
+    document.getElementById('denialName').textContent = state.playerName;
+    document.getElementById('denialCar').textContent = state.car;
+    document.getElementById('denialFailed').textContent = state.failedCases;
+    document.getElementById('denialKilled').textContent = state.killed;
+    document.getElementById('denialCaseNumber').textContent =
+      'BD-' + Math.floor(100000 + Math.random()*900000);
+    return;
+  }
   const ep = document.getElementById('endPanel');
   ep.classList.remove('hidden');
-  if (state.jailed) {
-    document.getElementById('endTitle').textContent = 'Prøven avbrutt';
-    document.getElementById('endLead').textContent =
-      'Kandidaten har overskredet maksimalt antall feil. Saken oversendes til videre behandling. Kompetansebevis utstedes med tilhørende karakter.';
-  }
   document.getElementById('certName').textContent = state.playerName;
   document.getElementById('statFailed').textContent = state.failedCases;
   document.getElementById('statKilled').textContent = state.killed;
   document.getElementById('statCar').textContent = state.car;
   const errs = state.errors;
   let grade;
-  if (state.jailed) grade = 'F';
-  else if (errs === 0) grade = 'A';
+  if (errs === 0) grade = 'A';
   else if (errs <= 1) grade = 'B';
   else if (errs <= 2) grade = 'C';
   else if (errs <= 4) grade = 'D';
@@ -1468,7 +1615,7 @@ document.getElementById('downloadBtn').addEventListener('click', () => {
   }
 });
 
-document.getElementById('restartBtn').addEventListener('click', () => {
+function fullRestart() {
   state.caseIndex = 0;
   state.failedCases = 0;
   state.killed = 0;
@@ -1477,8 +1624,11 @@ document.getElementById('restartBtn').addEventListener('click', () => {
   state.jailed = false;
   updateStrikeDots();
   document.getElementById('endPanel').classList.add('hidden');
+  document.getElementById('denialPanel').classList.add('hidden');
   document.getElementById('introPanel').classList.remove('hidden');
-});
+}
+document.getElementById('restartBtn').addEventListener('click', fullRestart);
+document.getElementById('denialRestartBtn').addEventListener('click', fullRestart);
 
 window.addEventListener('load', resizeCanvas);
 </script>
