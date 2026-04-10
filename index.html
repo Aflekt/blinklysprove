@@ -324,9 +324,18 @@
   }
   .wheel-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    gap: 6px;
+  }
+  .wheel-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
   }
   .steering-wheel {
     width: 96px;
@@ -603,7 +612,7 @@
       </div>
     </div>
     <div class="game-instructions">
-      Bruk piltastene <b>←</b> og <b>→</b> for å aktivere venstre/høyre blinklys. På mobil: bruk knappene under spillet.
+      <b>Blinklys:</b> piltast <b>←</b> / <b>→</b> eller knappene · <b>Sving:</b> trykk på rattet (eller piltast <b>↓</b>)
     </div>
     <div id="gameWrap">
       <canvas id="gameCanvas"></canvas>
@@ -611,9 +620,10 @@
     <div class="control-bar">
       <button id="leftBtn" class="ctrl-btn">
         <span class="arrow">←</span>
-        <span>VENSTRE</span>
+        <span>BLINKLYS</span>
       </button>
       <div class="wheel-container">
+        <div class="wheel-label">RATT</div>
         <div class="steering-wheel" id="steeringWheel">
           <div class="spoke-h"></div>
           <div class="spoke-v"></div>
@@ -622,7 +632,7 @@
       </div>
       <button id="rightBtn" class="ctrl-btn">
         <span class="arrow">→</span>
-        <span>HØYRE</span>
+        <span>BLINKLYS</span>
       </button>
     </div>
   </div>
@@ -870,7 +880,7 @@ function startCase(idx) {
   resizeCanvas();
   game = createGame(c);
   game.lastTime = performance.now();
-  updateSteeringWheel();
+  resetControlsUI();
   requestAnimationFrame(loop);
 }
 
@@ -1022,28 +1032,38 @@ function getPlayerPos() {
 }
 
 // ============ INPUT ============
+// pressBlink: toggles the indicator only — does NOT commit the maneuver.
 function pressBlink(side) {
   if (!game) return;
   if (game.crashPhase || game.success) return;
   if (game.phase !== 'approach') return;
+  game.blinker = side;
+  game.blinkerOnT = game.t;
+  refreshBlinkButtons();
+}
 
-  if (game.blinker === null) {
-    // First press: turn on blinker
-    game.blinker = side;
-    game.blinkerOnT = game.t;
-    return;
-  }
-  if (side !== game.blinker) {
-    // Switched side — restart timer
-    game.blinker = side;
-    game.blinkerOnT = game.t;
-    return;
-  }
-  // Second press on the same side = COMMIT MANEUVER
+// pressWheel: actually steers the car. This is the commit action.
+function pressWheel(side) {
+  if (!game) return;
+  if (game.crashPhase || game.success) return;
+  if (game.phase !== 'approach') return;
+
   const c = game.caseDef;
+
+  // Steering without any blinker on
+  if (game.blinker === null) {
+    game.crashReason = 'no_blink';
+    triggerCrash();
+    return;
+  }
+  // Steering wrong way relative to active blinker
+  if (side !== game.blinker) {
+    game.crashReason = 'wrong_side';
+    triggerCrash();
+    return;
+  }
+
   const lead = game.t - game.blinkerOnT;
-  // Grace period: ignore very rapid second press (probably accidental double-tap)
-  if (lead < 400) return;
   const okSide = side === c.expected;
   const okLead = lead >= 3000;
   const okClear = isObstacleClear(game.t);
@@ -1051,6 +1071,7 @@ function pressBlink(side) {
   if (okSide && okLead && okClear) {
     game.phase = 'maneuver';
     game.commitT = game.t;
+    animateWheel(side);
     return;
   }
   if (!okSide) game.crashReason = 'wrong_side';
@@ -1059,38 +1080,44 @@ function pressBlink(side) {
   triggerCrash();
 }
 
-function updateSteeringWheel() {
+function refreshBlinkButtons() {
+  const lb = document.getElementById('leftBtn');
+  const rb = document.getElementById('rightBtn');
+  if (lb) lb.classList.toggle('active', !!(game && game.blinker === 'left'));
+  if (rb) rb.classList.toggle('active', !!(game && game.blinker === 'right'));
+}
+
+function animateWheel(side) {
   const w = document.getElementById('steeringWheel');
   if (!w) return;
   w.classList.remove('left', 'right');
-  if (game && game.blinker === 'left') w.classList.add('left');
-  if (game && game.blinker === 'right') w.classList.add('right');
+  w.classList.add(side);
+  setTimeout(() => w && w.classList.remove(side), 1800);
 }
 
-const _origPressBlink = pressBlink;
-pressBlink = function(side) {
-  _origPressBlink(side);
-  // Brief active state on the corresponding button
-  const btn = document.getElementById(side === 'left' ? 'leftBtn' : 'rightBtn');
-  if (btn) {
-    btn.classList.add('active');
-    setTimeout(() => btn.classList.remove('active'), 180);
-  }
-  updateSteeringWheel();
-};
+// Reset wheel + buttons when starting a new case
+function resetControlsUI() {
+  const w = document.getElementById('steeringWheel');
+  if (w) w.classList.remove('left', 'right');
+  refreshBlinkButtons();
+}
 
 window.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowLeft') { pressBlink('left'); e.preventDefault(); }
+  if (e.key === 'ArrowLeft')  { pressBlink('left');  e.preventDefault(); }
   if (e.key === 'ArrowRight') { pressBlink('right'); e.preventDefault(); }
+  if (e.key === 'ArrowDown' || e.key === ' ') {
+    if (game && game.blinker) pressWheel(game.blinker);
+    e.preventDefault();
+  }
 });
 document.getElementById('leftBtn').addEventListener('click', () => pressBlink('left'));
 document.getElementById('rightBtn').addEventListener('click', () => pressBlink('right'));
-// The wheel itself is also clickable: click left half = left, right half = right
+// The wheel is the steering control: click left half = steer left, right half = steer right
 document.getElementById('steeringWheel').addEventListener('click', (ev) => {
   const rect = ev.currentTarget.getBoundingClientRect();
   const x = ev.clientX - rect.left;
-  if (x < rect.width/2) pressBlink('left');
-  else pressBlink('right');
+  if (x < rect.width/2) pressWheel('left');
+  else pressWheel('right');
 });
 
 // ============ MAIN LOOP ============
