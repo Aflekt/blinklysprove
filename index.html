@@ -286,32 +286,100 @@
     color: var(--vv-text-soft);
     border-bottom: 1px solid var(--vv-border);
   }
-  .blinker-buttons {
-    display: none;
-    justify-content: space-between;
-    padding: 14px;
+  /* ===== Control bar (always visible): blinker buttons + steering wheel ===== */
+  .control-bar {
+    display: flex;
     background: var(--vv-text);
-    gap: 12px;
+    padding: 18px 22px;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
   }
-  .blinker-buttons button {
+  .ctrl-btn {
     flex: 1;
-    padding: 24px 0;
-    font-size: 20px;
-    background: #2f3a40;
-    border: 2px solid #6b757a;
-    color: #fff;
-    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 18px 14px;
+    font-size: 14px;
     font-weight: 700;
-    cursor: pointer;
+    background: #2f3a40;
+    color: #fff;
+    border: 2px solid #6b757a;
+    border-radius: 4px;
     font-family: inherit;
+    cursor: pointer;
+    max-width: 200px;
+    letter-spacing: 0.6px;
+    transition: background 0.1s;
   }
-  .blinker-buttons button:active { background: #fff; color: var(--vv-text); border-color: #fff; }
+  .ctrl-btn .arrow { font-size: 30px; line-height: 1; }
+  .ctrl-btn:hover { background: #404a4f; }
+  .ctrl-btn:active, .ctrl-btn.active {
+    background: #fff;
+    color: var(--vv-text);
+    border-color: #fff;
+  }
+  .wheel-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .steering-wheel {
+    width: 96px;
+    height: 96px;
+    border: 9px solid #fff;
+    border-radius: 50%;
+    position: relative;
+    background: #2f3a40;
+    transition: transform 0.25s ease;
+    cursor: pointer;
+    user-select: none;
+  }
+  .steering-wheel.left { transform: rotate(-32deg); }
+  .steering-wheel.right { transform: rotate(32deg); }
+  .steering-wheel .spoke-h,
+  .steering-wheel .spoke-v {
+    position: absolute;
+    background: #fff;
+  }
+  .steering-wheel .spoke-h {
+    width: 80%;
+    height: 7px;
+    top: 50%;
+    left: 10%;
+    transform: translateY(-50%);
+    border-radius: 2px;
+  }
+  .steering-wheel .spoke-v {
+    width: 7px;
+    height: 38%;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+  }
+  .steering-wheel .hub {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    background: #fff;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
   @media (max-width: 768px) {
-    .blinker-buttons { display: flex; }
     .container { padding: 32px 20px 40px; }
     .hero { padding: 40px 20px 50px; }
     .hero h1 { font-size: 32px; }
     .card h2 { font-size: 24px; }
+    .ctrl-btn { padding: 14px 8px; font-size: 13px; }
+    .steering-wheel { width: 70px; height: 70px; border-width: 7px; }
+    .steering-wheel .hub { width: 20px; height: 20px; }
   }
 
   /* ===== Failure / Success ===== */
@@ -480,7 +548,7 @@
   <div id="introPanel" class="card">
     <h2>Obligatorisk blinklysprøve</h2>
     <p class="lead">Alle førere av motorvogn er pålagt å gjennomføre en sertifisert blinklysprøve i henhold til forskrift om førerkompetanse §3-1.</p>
-    <p>Prøven består av åtte (8) standardiserte kjøresituasjoner. Kandidaten skal demonstrere korrekt bruk av retningsangivere i henhold til vegtrafikkloven §11. Manglende beståelse kan medføre revurdering av førerkortets gyldighet.</p>
+    <p>Prøven består av syv (7) standardiserte kjøresituasjoner. Kandidaten skal demonstrere korrekt bruk av retningsangivere i henhold til vegtrafikkloven §11. Manglende beståelse kan medføre revurdering av førerkortets gyldighet.</p>
 
     <h3>Antall forsøk</h3>
     <p>Kandidaten har <b>tre (3) forsøk</b> totalt i løpet av prøven. Ved tredje feil avbrytes prøven og kandidaten overføres til videre saksbehandling.</p>
@@ -540,9 +608,22 @@
     <div id="gameWrap">
       <canvas id="gameCanvas"></canvas>
     </div>
-    <div class="blinker-buttons">
-      <button id="leftBtn">← VENSTRE</button>
-      <button id="rightBtn">HØYRE →</button>
+    <div class="control-bar">
+      <button id="leftBtn" class="ctrl-btn">
+        <span class="arrow">←</span>
+        <span>VENSTRE</span>
+      </button>
+      <div class="wheel-container">
+        <div class="steering-wheel" id="steeringWheel">
+          <div class="spoke-h"></div>
+          <div class="spoke-v"></div>
+          <div class="hub"></div>
+        </div>
+      </div>
+      <button id="rightBtn" class="ctrl-btn">
+        <span class="arrow">→</span>
+        <span>HØYRE</span>
+      </button>
     </div>
   </div>
 
@@ -647,18 +728,7 @@ const CASES = [
     pathType: 'laneChangeRight'
   },
   {
-    title: 'Sak 2: Feltskifte til venstre (motorvei)',
-    expected: 'left',
-    rule: 'Vegtrafikkloven §11: Tegn skal gis i god tid før manøveren, slik at andre trafikanter kan innrette seg etter det.',
-    crashType: 'rear',
-    absurd: [
-      'Det er ikke noe vits å blinke MENS du svinger. Da ser vi det allerede.',
-      'En lastebil kjørte rett gjennom deg. Lastebilen er uskadd.'
-    ],
-    pathType: 'laneChangeLeft'
-  },
-  {
-    title: 'Sak 3: Avkjøring fra motorvei',
+    title: 'Sak 2: Avkjøring fra motorvei',
     expected: 'right',
     rule: 'Forskrift om kjøretøytegn §5: Ved avkjøring fra motorvei skal høyre retningsviser være aktivert i god tid før avkjøringsfeltet.',
     crashType: 'pedestrian',
@@ -669,7 +739,7 @@ const CASES = [
     pathType: 'exit'
   },
   {
-    title: 'Sak 4: Parkering langs fortau',
+    title: 'Sak 3: Parkering langs fortau',
     expected: 'right',
     rule: 'Trafikkreglene §14: Ved parkering langs vegkant skal fører gi tegn til høyre i god tid før kjøretøyet stanser.',
     crashType: 'cyclist',
@@ -680,7 +750,7 @@ const CASES = [
     pathType: 'park'
   },
   {
-    title: 'Sak 5: Høyresving i kryss',
+    title: 'Sak 4: Høyresving i kryss',
     expected: 'right',
     rule: 'Trafikkreglene §13: Fører som skal svinge i kryss, skal gi tegn i god tid før manøveren og avvente til fotgjengerfeltet er fritt. Det er ikke tilstrekkelig at den første fotgjengeren har passert.',
     crashType: 'pedestrian',
@@ -693,7 +763,7 @@ const CASES = [
     pathType: 'turnRight'
   },
   {
-    title: 'Sak 6: Venstresving i kryss',
+    title: 'Sak 5: Venstresving i kryss',
     expected: 'left',
     rule: 'Trafikkreglene §13: Ved venstresving skal venstre retningsviser være aktivert i god tid, og fører skal forsikre seg om at fotgjengerfeltet er klart før manøveren utføres.',
     crashType: 'pedestrian',
@@ -706,7 +776,7 @@ const CASES = [
     pathType: 'turnLeft'
   },
   {
-    title: 'Sak 7: Rundkjøring – første avkjørsel',
+    title: 'Sak 6: Rundkjøring – første avkjørsel',
     expected: 'right',
     rule: 'Trafikkreglene §14a: Ved utkjøring fra rundkjøring skal høyre retningsviser være aktivert. Ved første avkjørsel skal tegnet gis så snart kjøretøyet har passert innkjøringen.',
     crashType: 'stroller',
@@ -717,7 +787,7 @@ const CASES = [
     pathType: 'roundabout1'
   },
   {
-    title: 'Sak 8: Rundkjøring – andre avkjørsel',
+    title: 'Sak 7: Rundkjøring – andre avkjørsel',
     expected: 'right',
     rule: 'Trafikkreglene §14a: I rundkjøringer med flere avkjørsler skal høyre retningsviser aktiveres FØR ønsket avkjørsel, og ikke før. Tegn ved første avkjørsel når man skal videre, regnes som villedende tegn.',
     crashType: 'cyclist',
@@ -792,7 +862,7 @@ let game = null;
 function startCase(idx) {
   state.caseIndex = idx;
   const c = CASES[idx];
-  document.getElementById('caseNum').textContent = `Sak ${idx+1} av 8`;
+  document.getElementById('caseNum').textContent = `Sak ${idx+1} av ${CASES.length}`;
   document.getElementById('caseTitle').textContent = c.title;
   document.getElementById('gamePanel').classList.remove('hidden');
   document.getElementById('failurePanel').classList.add('hidden');
@@ -800,6 +870,7 @@ function startCase(idx) {
   resizeCanvas();
   game = createGame(c);
   game.lastTime = performance.now();
+  updateSteeringWheel();
   requestAnimationFrame(loop);
 }
 
@@ -832,13 +903,13 @@ function easeInOut(t) {
   return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2;
 }
 
-// Shared bezier for the exit ramp — used by visual draw, player path, and obstacle
+// Shared bezier for the exit ramp — used by visual draw and player path
 function exitBezier(t) {
   const w = W(), h = H();
-  const p0x = w*0.28, p0y = h*0.55;
-  const p1x = w*0.58, p1y = h*0.55;
-  const p2x = w*0.88, p2y = h*0.78;
-  const p3x = w*1.12, p3y = h*1.06;
+  const p0x = w*0.30, p0y = h*0.55;
+  const p1x = w*0.50, p1y = h*0.55;
+  const p2x = w*0.65, p2y = h*1.00;
+  const p3x = w*0.78, p3y = h*1.18;
   const u = 1 - t;
   const x = u*u*u*p0x + 3*u*u*t*p1x + 3*u*t*t*p2x + t*t*t*p3x;
   const y = u*u*u*p0y + 3*u*u*t*p1y + 3*u*t*t*p2y + t*t*t*p3y;
@@ -988,12 +1059,39 @@ function pressBlink(side) {
   triggerCrash();
 }
 
+function updateSteeringWheel() {
+  const w = document.getElementById('steeringWheel');
+  if (!w) return;
+  w.classList.remove('left', 'right');
+  if (game && game.blinker === 'left') w.classList.add('left');
+  if (game && game.blinker === 'right') w.classList.add('right');
+}
+
+const _origPressBlink = pressBlink;
+pressBlink = function(side) {
+  _origPressBlink(side);
+  // Brief active state on the corresponding button
+  const btn = document.getElementById(side === 'left' ? 'leftBtn' : 'rightBtn');
+  if (btn) {
+    btn.classList.add('active');
+    setTimeout(() => btn.classList.remove('active'), 180);
+  }
+  updateSteeringWheel();
+};
+
 window.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowLeft') { pressBlink('left'); e.preventDefault(); }
   if (e.key === 'ArrowRight') { pressBlink('right'); e.preventDefault(); }
 });
 document.getElementById('leftBtn').addEventListener('click', () => pressBlink('left'));
 document.getElementById('rightBtn').addEventListener('click', () => pressBlink('right'));
+// The wheel itself is also clickable: click left half = left, right half = right
+document.getElementById('steeringWheel').addEventListener('click', (ev) => {
+  const rect = ev.currentTarget.getBoundingClientRect();
+  const x = ev.clientX - rect.left;
+  if (x < rect.width/2) pressBlink('left');
+  else pressBlink('right');
+});
 
 // ============ MAIN LOOP ============
 function loop(now) {
@@ -1222,11 +1320,10 @@ function drawObstacle() {
       break;
     }
     case 'exit': {
-      // Slow car ahead on the exit ramp — sits on the same bezier as the player,
-      // starts ahead of the player (param 0.30) and slides further along, off-screen.
-      const obT = Math.min(1, 0.30 + (t/1000) * 0.18);
-      const ob = exitBezier(obT);
-      drawOtherCar(ob.x, ob.y, ob.angle, '#c0392b');
+      // Slow car ahead in the SAME right lane on the main road, going east.
+      // Player must wait for it to clear the area before exiting down the ramp.
+      const px = w*0.50 + (t/1000) * (w*0.12);
+      drawOtherCar(px, h*0.55, 0, '#c0392b');
       break;
     }
     case 'park': {
