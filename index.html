@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Statens Blinklysdirektorat – Obligatorisk Blinklysprøve</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    font-family: Georgia, "Times New Roman", serif;
+    background: #f4f4f0;
+    color: #1a1a1a;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  header.govbar {
+    background: #fff;
+    border-bottom: 4px solid #00509e;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  header.govbar .crest { font-size: 32px; }
+  header.govbar .titles h1 {
+    font-size: 18px;
+    color: #00509e;
+    letter-spacing: 0.3px;
+  }
+  header.govbar .titles p {
+    font-size: 12px;
+    color: #555;
+    font-style: italic;
+  }
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  .panel {
+    background: #fff;
+    border: 1px solid #c8c8c0;
+    border-top: 3px solid #00509e;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .panel h2 {
+    color: #00509e;
+    font-size: 22px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 6px;
+  }
+  .panel p { line-height: 1.5; margin-bottom: 12px; font-size: 15px; }
+  .panel .official {
+    background: #f0f4f9;
+    border-left: 4px solid #00509e;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #333;
+    margin: 14px 0;
+    font-style: italic;
+  }
+  button.gov {
+    background: #00509e;
+    color: #fff;
+    border: none;
+    padding: 12px 22px;
+    font-size: 15px;
+    font-family: inherit;
+    cursor: pointer;
+    border-radius: 2px;
+    margin: 6px 4px;
+  }
+  button.gov:hover { background: #003a73; }
+  button.gov.secondary { background: #6c757d; }
+  button.gov.secondary:hover { background: #555; }
+  input.gov {
+    border: 1px solid #aaa;
+    padding: 10px 12px;
+    font-size: 15px;
+    font-family: inherit;
+    width: 100%;
+    max-width: 320px;
+    margin-top: 8px;
+  }
+  .car-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .car-card {
+    border: 2px solid #c8c8c0;
+    background: #fafafa;
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .car-card:hover { border-color: #00509e; }
+  .car-card.selected { border-color: #00509e; background: #e8f0fa; }
+  .car-card .ico {
+    font-size: 38px;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .car-card .name { font-weight: bold; font-size: 14px; }
+  .car-card .desc { font-size: 11px; color: #666; margin-top: 4px; }
+
+  #gameWrap {
+    position: relative;
+    background: #000;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    aspect-ratio: 4 / 3;
+  }
+  #gameCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .case-banner {
+    background: #00509e;
+    color: #fff;
+    padding: 10px 16px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .case-banner b { font-size: 16px; }
+  .blinker-buttons {
+    display: none;
+    justify-content: space-between;
+    padding: 12px;
+    background: #222;
+  }
+  .blinker-buttons button {
+    flex: 1;
+    margin: 0 6px;
+    padding: 24px 0;
+    font-size: 28px;
+    background: #444;
+    border: 2px solid #666;
+    color: #fff;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .blinker-buttons button:active { background: #f9a825; color: #000; }
+  @media (max-width: 768px) {
+    .blinker-buttons { display: flex; }
+  }
+  .failure-screen {
+    text-align: center;
+  }
+  .failure-screen h2 { color: #c0392b; }
+  .failure-screen .absurd {
+    font-size: 18px;
+    margin: 16px 0;
+    color: #1a1a1a;
+    line-height: 1.4;
+  }
+  .premium-note {
+    display: inline-block;
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    padding: 4px 10px;
+    font-size: 12px;
+    margin-top: 8px;
+    color: #856404;
+  }
+  .certificate {
+    background: #fdfcf6;
+    border: 8px double #00509e;
+    padding: 40px 30px;
+    text-align: center;
+    position: relative;
+    font-family: Georgia, serif;
+  }
+  .certificate h2 {
+    font-size: 26px;
+    color: #00509e;
+    border: none;
+    margin-bottom: 6px;
+  }
+  .certificate .sub { font-style: italic; color: #555; margin-bottom: 22px; }
+  .certificate .name {
+    font-size: 30px;
+    margin: 18px 0;
+    border-bottom: 1px solid #888;
+    display: inline-block;
+    padding: 0 30px 6px;
+  }
+  .certificate .grade-box {
+    display: inline-block;
+    margin: 18px 0;
+    padding: 16px 28px;
+    border: 3px solid #00509e;
+    font-size: 48px;
+    font-weight: bold;
+    color: #00509e;
+  }
+  .certificate .stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 18px 0;
+    font-size: 13px;
+    color: #444;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .certificate .stats div { padding: 6px 12px; }
+  .certificate .signature {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .certificate .stamp {
+    border: 3px solid #c0392b;
+    color: #c0392b;
+    font-weight: bold;
+    padding: 12px 16px;
+    border-radius: 50%;
+    transform: rotate(-12deg);
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.2;
+    width: 110px;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .certificate .sig {
+    font-family: "Brush Script MT", cursive;
+    font-size: 24px;
+    border-top: 1px solid #333;
+    padding-top: 4px;
+    min-width: 200px;
+  }
+  .hidden { display: none !important; }
+  .confetti-piece {
+    position: fixed;
+    width: 10px;
+    height: 14px;
+    top: -20px;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  footer.govfoot {
+    text-align: center;
+    padding: 20px;
+    font-size: 11px;
+    color: #777;
+    border-top: 1px solid #ddd;
+    margin-top: 30px;
+  }
+</style>
+</head>
+<body>
+
+<header class="govbar">
+  <div class="crest">🦁</div>
+  <div class="titles">
+    <h1>Statens Blinklysdirektorat</h1>
+    <p>Obligatorisk Blinklysprøve – Sertifisering for vegtrafikanter</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <div id="introPanel" class="panel">
+    <h2>Velkommen til den obligatoriske blinklysprøven</h2>
+    <p>I henhold til <b>forskrift om kjørende kompetanse §3-1</b> er alle førere pålagt å gjennomføre en sertifisert blinklysprøve. Manglende beståelse medfører umiddelbar revurdering av førerkortets gyldighet.</p>
+    <div class="official">
+      Prøven består av åtte (8) standardiserte kjøresituasjoner. Kandidaten skal demonstrere korrekt bruk av retningsangivere i henhold til <b>vegtrafikkloven §11</b>. Husk: Blinklys skal aktiveres minimum tre (3) sekunder før manøveren påbegynnes.
+    </div>
+    <p><b>Navn på kandidat:</b></p>
+    <input class="gov" id="playerName" placeholder="Skriv inn fullt navn (valgfritt)" maxlength="40">
+
+    <h2 style="margin-top:24px;">Velg kjøretøy</h2>
+    <p>Kandidaten må oppgi hvilket kjøretøy som benyttes under prøven. Kjøretøytypen påvirker vurderingsgrunnlaget.</p>
+    <div class="car-grid">
+      <div class="car-card" data-car="Vanlig bil">
+        <span class="ico">🚗</span>
+        <div class="name">Vanlig bil</div>
+        <div class="desc">Standard personbil</div>
+      </div>
+      <div class="car-card" data-car="Stasjonsvogn">
+        <span class="ico">🚙</span>
+        <div class="name">Stasjonsvogn</div>
+        <div class="desc">Familiekjøretøy</div>
+      </div>
+      <div class="car-card" data-car="BMW">
+        <span class="ico">🏎️</span>
+        <div class="name">BMW</div>
+        <div class="desc">Premiumkjøretøy</div>
+      </div>
+      <div class="car-card" data-car="Tesla">
+        <span class="ico">⚡</span>
+        <div class="name">Tesla</div>
+        <div class="desc">Premiumkjøretøy</div>
+      </div>
+    </div>
+    <div id="premiumWarning" class="official hidden" style="border-color:#c0392b;background:#fbeae5;color:#7a2018;">
+      <b>Merk:</b> Eiere av premiumkjøretøy er underlagt skjerpede krav i henhold til forskrift §14-2b. Feil gir dobbelt trekk.
+    </div>
+    <button class="gov" id="startBtn" disabled>Start blinklysprøven</button>
+  </div>
+
+  <!-- GAME -->
+  <div id="gamePanel" class="panel hidden" style="padding:0;">
+    <div class="case-banner">
+      <div><b id="caseNum">Sak 1 / 8</b><br><span id="caseTitle">—</span></div>
+      <div style="font-size:12px; text-align:right;">Trykk ← / → for blinklys<br>(eller bruk knappene under)</div>
+    </div>
+    <div id="gameWrap">
+      <canvas id="gameCanvas"></canvas>
+    </div>
+    <div class="blinker-buttons">
+      <button id="leftBtn">← VENSTRE</button>
+      <button id="rightBtn">HØYRE →</button>
+    </div>
+  </div>
+
+  <!-- FAILURE -->
+  <div id="failurePanel" class="panel failure-screen hidden">
+    <h2>Sak ikke bestått</h2>
+    <p class="absurd" id="absurdMsg">—</p>
+    <div class="official" id="officialRule">—</div>
+    <div id="premiumNoteWrap"></div>
+    <div style="margin-top:18px;">
+      <button class="gov" id="retryBtn">Prøv igjen</button>
+      <button class="gov secondary" id="nextBtn">Neste oppgave</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS (per case) -->
+  <div id="successPanel" class="panel hidden" style="text-align:center;">
+    <h2 style="color:#2d7a2d;">Sak godkjent ✓</h2>
+    <p id="successMsg">Manøveren ble utført korrekt i henhold til forskriftens krav.</p>
+    <button class="gov" id="continueBtn">Neste sak</button>
+  </div>
+
+  <!-- END / CERTIFICATE -->
+  <div id="endPanel" class="panel hidden">
+    <div class="certificate" id="certificate">
+      <div style="font-size:42px;">🦁</div>
+      <h2>Blinklysdirektoratets offisielle kompetansebevis</h2>
+      <div class="sub">Utstedt i henhold til forskrift om førerkompetanse §3-1</div>
+      <div>Tildeles herved</div>
+      <div class="name" id="certName">Sjåfør</div>
+      <div>for gjennomført obligatorisk blinklysprøve med karakteren</div>
+      <div class="grade-box" id="gradeBox">F</div>
+      <div class="stats">
+        <div><b id="statFailed">0</b><br>saker ikke bestått</div>
+        <div><b id="statKilled">0</b><br>skadde / drepte</div>
+        <div><b id="statCar">—</b><br>kjøretøy</div>
+      </div>
+      <div class="signature">
+        <div class="sig">H. Blinklys<br><span style="font-family:Georgia;font-size:11px;">Direktør, Statens Blinklysdirektorat</span></div>
+        <div class="stamp">STATENS<br>BLINKLYS-<br>DIREKTORAT<br>OFFISIELT</div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:18px;">
+      <button class="gov" id="downloadBtn">Last ned bevis som bilde</button>
+      <button class="gov secondary" id="restartBtn">Ta prøven på nytt</button>
+    </div>
+  </div>
+
+</div>
+
+<footer class="govfoot">
+  © Statens Blinklysdirektorat · Postboks 14 Blinkveien · 0032 Oslo · Org.nr 999 999 998
+</footer>
+
+<script>
+// ============ STATE ============
+const state = {
+  car: null,
+  playerName: 'Sjåfør',
+  caseIndex: 0,
+  failedCases: 0,
+  killed: 0,
+  errors: 0, // weighted (premium x2)
+  isPremium: false,
+};
+
+// ============ CASES ============
+const CASES = [
+  {
+    title: 'Sak 1: Feltskifte til høyre (motorvei)',
+    expected: 'right',
+    rule: 'Vegtrafikkloven §11: Fører skal gi tegn ved feltskifte. Tegnet skal gis minimum 3 sekunder før manøveren starter, jf. forskrift om kjøretøytegn §4.',
+    crashType: 'rear',
+    absurd: [
+      'Bilen bak fikk ikke tid til å reagere. Bilen bak finnes ikke lenger.',
+      'Du skiftet fil uten varsel. Trafikken bak deg gjorde det samme – inn i deg.'
+    ],
+    pathType: 'laneChangeRight'
+  },
+  {
+    title: 'Sak 2: Feltskifte til venstre (motorvei)',
+    expected: 'left',
+    rule: 'Vegtrafikkloven §11: Tegn skal gis i god tid før manøveren, slik at andre trafikanter kan innrette seg etter det.',
+    crashType: 'rear',
+    absurd: [
+      'Det er ikke noe vits å blinke MENS du svinger. Da ser vi det allerede.',
+      'En lastebil kjørte rett gjennom deg. Lastebilen er uskadd.'
+    ],
+    pathType: 'laneChangeLeft'
+  },
+  {
+    title: 'Sak 3: Avkjøring fra motorvei',
+    expected: 'right',
+    rule: 'Forskrift om kjøretøytegn §5: Ved avkjøring fra motorvei skal høyre retningsviser være aktivert i god tid før avkjøringsfeltet, og være på til manøveren er fullført.',
+    crashType: 'pedestrian',
+    absurd: [
+      'Du har drept 1 fotgjenger. Dette er ikke optimalt.',
+      'Fotgjengeren krysset lovlig. Du gjorde ikke.'
+    ],
+    pathType: 'exit'
+  },
+  {
+    title: 'Sak 4: Parkering langs fortau',
+    expected: 'right',
+    rule: 'Trafikkreglene §14: Ved parkering langs vegkant skal fører gi tegn til høyre i god tid før kjøretøyet stanser.',
+    crashType: 'cyclist',
+    absurd: [
+      'Sykkelen hadde forkjørsrett. Sykkelen er nå ødelagt. Du har ødelagt sykkelen.',
+      'En syklist trodde du skulle fortsette rett frem. Det gjorde syklisten også – inn i bagasjeromsdøren din.'
+    ],
+    pathType: 'park'
+  },
+  {
+    title: 'Sak 5: Høyresving i kryss',
+    expected: 'right',
+    rule: 'Trafikkreglene §13: Fører som skal svinge i kryss, skal gi tegn i god tid før manøveren. Tegnet skal være entydig og oppfattbart for andre trafikanter.',
+    crashType: 'pedestrian',
+    absurd: [
+      'En fotgjenger ventet på at du skulle vise hvor du skulle. Du viste det ved å treffe vedkommende.',
+      'Sving uten blink er ikke en sving. Det er en overraskelse.'
+    ],
+    pathType: 'turnRight'
+  },
+  {
+    title: 'Sak 6: Venstresving i kryss',
+    expected: 'left',
+    rule: 'Trafikkreglene §13: Ved venstresving skal venstre retningsviser være aktivert i god tid, og fører skal forsikre seg om at manøveren kan utføres uten fare for andre.',
+    crashType: 'rear',
+    absurd: [
+      'Bilen bak antok at du skulle fortsette rett frem. Det var en rimelig antakelse.',
+      'Du svingte til venstre som en hemmelighet. Hemmeligheten er ute nå.'
+    ],
+    pathType: 'turnLeft'
+  },
+  {
+    title: 'Sak 7: Rundkjøring – første avkjørsel',
+    expected: 'right',
+    rule: 'Trafikkreglene §14a: Ved utkjøring fra rundkjøring skal høyre retningsviser være aktivert. Ved første avkjørsel skal tegnet gis så snart kjøretøyet har passert innkjøringen.',
+    crashType: 'stroller',
+    absurd: [
+      'Du har truffet en barnevogn. Vi kommer ikke til å gå nærmere inn på detaljene.',
+      'En forelder regnet med at du skulle kjøre videre rundt. Forelderen er nå alene.'
+    ],
+    pathType: 'roundabout1'
+  },
+  {
+    title: 'Sak 8: Rundkjøring – andre avkjørsel',
+    expected: 'right',
+    rule: 'Trafikkreglene §14a: I rundkjøringer med flere avkjørsler skal høyre retningsviser aktiveres FØR ønsket avkjørsel, og ikke før. Tegn ved første avkjørsel når man skal videre, regnes som villedende tegn.',
+    crashType: 'cyclist',
+    absurd: [
+      'Du blinket på feil avkjørsel. En syklist trodde deg. Syklisten finnes ikke lenger.',
+      'En blinker som lyver er verre enn en blinker som tier. Det vet man.'
+    ],
+    pathType: 'roundabout2'
+  },
+];
+
+// ============ CAR SELECTION ============
+const carCards = document.querySelectorAll('.car-card');
+const startBtn = document.getElementById('startBtn');
+const premiumWarning = document.getElementById('premiumWarning');
+
+carCards.forEach(card => {
+  card.addEventListener('click', () => {
+    carCards.forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    state.car = card.dataset.car;
+    state.isPremium = (state.car === 'BMW' || state.car === 'Tesla');
+    premiumWarning.classList.toggle('hidden', !state.isPremium);
+    startBtn.disabled = false;
+  });
+});
+
+startBtn.addEventListener('click', () => {
+  const nameInput = document.getElementById('playerName').value.trim();
+  if (nameInput) state.playerName = nameInput;
+  document.getElementById('introPanel').classList.add('hidden');
+  document.getElementById('gamePanel').classList.remove('hidden');
+  startCase(0);
+});
+
+// ============ CANVAS / GAME ============
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+window.addEventListener('resize', resizeCanvas);
+
+// World coordinates: we render in canvas pixel space, scaled by .getBoundingClientRect()
+function W() { return canvas.getBoundingClientRect().width; }
+function H() { return canvas.getBoundingClientRect().height; }
+
+// Game state per case
+let game = null;
+
+function startCase(idx) {
+  state.caseIndex = idx;
+  const c = CASES[idx];
+  document.getElementById('caseNum').textContent = `Sak ${idx+1} / 8`;
+  document.getElementById('caseTitle').textContent = c.title;
+  document.getElementById('gamePanel').classList.remove('hidden');
+  document.getElementById('failurePanel').classList.add('hidden');
+  document.getElementById('successPanel').classList.add('hidden');
+  resizeCanvas();
+  game = createGame(c);
+  game.lastTime = performance.now();
+  requestAnimationFrame(loop);
+}
+
+function createGame(caseDef) {
+  return {
+    caseDef,
+    t: 0,
+    blinker: null, // 'left' | 'right' | null
+    blinkerStartT: 0,
+    decisionMade: false, // user blinked
+    judged: false,
+    crashed: false,
+    crashPhase: null, // 'crash' -> 'wasted' -> 'fade' -> 'jail' -> 'failure'
+    crashTimer: 0,
+    success: false,
+    successTimer: 0,
+    progress: 0, // 0..1 along path
+    speed: 0.00018, // progress per ms
+    car: { x: 0, y: 0, angle: 0 },
+    obstacles: [],
+    lastTime: 0,
+    pathFn: makePathFn(caseDef.pathType),
+    maneuverStart: maneuverStartFor(caseDef.pathType), // progress at which the maneuver visually begins
+    blinkerNeededBy: null, // computed based on speed
+    flashOn: true,
+    flashTimer: 0,
+  };
+}
+
+function maneuverStartFor(type) {
+  // progress value where the actual turning/lane change begins
+  switch(type) {
+    case 'laneChangeRight': return 0.55;
+    case 'laneChangeLeft': return 0.55;
+    case 'exit': return 0.55;
+    case 'park': return 0.55;
+    case 'turnRight': return 0.55;
+    case 'turnLeft': return 0.55;
+    case 'roundabout1': return 0.55;
+    case 'roundabout2': return 0.72;
+    default: return 0.55;
+  }
+}
+
+function makePathFn(type) {
+  // Returns function(progress) -> {x, y, angle} in normalized 0..1 canvas space
+  return function(p) {
+    const w = W(), h = H();
+    let x = 0, y = 0, ang = 0;
+    switch(type) {
+      case 'laneChangeRight': {
+        // start in middle-left lane, lane change right midway
+        const startY = h*0.5;
+        const endY = h*0.65;
+        x = p * w * 1.0;
+        if (p < 0.55) y = startY;
+        else if (p < 0.75) {
+          const t = (p-0.55)/0.20;
+          y = startY + (endY-startY) * t;
+          ang = Math.atan2((endY-startY)/(0.20*w), 1)*0.5;
+        } else y = endY;
+        break;
+      }
+      case 'laneChangeLeft': {
+        const startY = h*0.65;
+        const endY = h*0.45;
+        x = p * w * 1.0;
+        if (p < 0.55) y = startY;
+        else if (p < 0.75) {
+          const t = (p-0.55)/0.20;
+          y = startY + (endY-startY) * t;
+          ang = Math.atan2((endY-startY)/(0.20*w), 1)*0.5;
+        } else y = endY;
+        break;
+      }
+      case 'exit': {
+        // straight then exit ramp curving right-down
+        x = p * w * 1.0;
+        const baseY = h*0.45;
+        if (p < 0.55) y = baseY;
+        else {
+          const t = (p-0.55)/0.45;
+          y = baseY + Math.pow(t,1.4)*h*0.4;
+          ang = Math.atan(t*1.5)*0.5;
+        }
+        break;
+      }
+      case 'park': {
+        const startY = h*0.45;
+        const endY = h*0.62;
+        x = p * w * 0.9 + w*0.05;
+        if (p < 0.55) y = startY;
+        else {
+          const t = (p-0.55)/0.45;
+          y = startY + (endY-startY)*t;
+          ang = Math.atan2((endY-startY)/(0.45*w*0.9), 1)*0.4;
+        }
+        break;
+      }
+      case 'turnRight': {
+        // moves up to intersection then turns right (downward visually)
+        if (p < 0.55) {
+          x = w*0.5;
+          y = h - p*h*0.9;
+          ang = -Math.PI/2;
+        } else {
+          const t = (p-0.55)/0.45;
+          const cx = w*0.5 + h*0.18;
+          const cy = h - 0.55*h*0.9;
+          const r = h*0.18;
+          const a = Math.PI - t*Math.PI/2;
+          x = cx + Math.cos(a)*r;
+          y = cy - Math.sin(a)*r;
+          ang = -Math.PI/2 + t*Math.PI/2;
+        }
+        break;
+      }
+      case 'turnLeft': {
+        if (p < 0.55) {
+          x = w*0.5;
+          y = h - p*h*0.9;
+          ang = -Math.PI/2;
+        } else {
+          const t = (p-0.55)/0.45;
+          const cx = w*0.5 - h*0.18;
+          const cy = h - 0.55*h*0.9;
+          const r = h*0.18;
+          const a = t*Math.PI/2;
+          x = cx + Math.sin(a)*r;
+          y = cy - Math.cos(a)*r * 0 - (h - 0.55*h*0.9 - Math.cos(a)*r);
+          // simpler: parametric
+          x = cx + Math.cos(a)*r;
+          y = cy - Math.sin(a)*r;
+          ang = -Math.PI/2 - t*Math.PI/2;
+        }
+        break;
+      }
+      case 'roundabout1': {
+        // approach from bottom, enter, exit at first (right side)
+        const cx = w*0.5, cy = h*0.5, R = Math.min(w,h)*0.22;
+        if (p < 0.35) {
+          x = cx;
+          y = h - p/0.35 * (h - (cy+R+20));
+          ang = -Math.PI/2;
+        } else if (p < 0.55) {
+          // arc from bottom (angle = -PI/2) to right (angle = 0), CCW visually but in roundabout we go CW... use angle param
+          const t = (p-0.35)/0.20;
+          const a = -Math.PI/2 - t*Math.PI/2; // go to -PI (left) — wait, want first exit on right
+          // Actually first exit = right side. Enter from bottom going up, in roundabout cars go counterclockwise (left).
+          // So from bottom (angle PI/2 below center), go counterclockwise, first exit = right side.
+          // Use entrance at bottom (angle = PI/2 in screen coords where +y down).
+          // From bottom, CCW means angle decreases. After 90deg CCW we're at right side. Good.
+          const a2 = Math.PI/2 - t*Math.PI/2;
+          x = cx + Math.cos(a2)*R;
+          y = cy + Math.sin(a2)*R;
+          ang = a2 + Math.PI; // tangent
+        } else {
+          const t = (p-0.55)/0.45;
+          x = cx + R + t*w*0.4;
+          y = cy;
+          ang = 0;
+        }
+        break;
+      }
+      case 'roundabout2': {
+        const cx = w*0.5, cy = h*0.5, R = Math.min(w,h)*0.22;
+        if (p < 0.30) {
+          x = cx;
+          y = h - p/0.30 * (h - (cy+R+20));
+          ang = -Math.PI/2;
+        } else if (p < 0.72) {
+          // go from bottom CCW past first exit (right) to second exit (top)
+          const t = (p-0.30)/0.42;
+          const a2 = Math.PI/2 - t*Math.PI; // 90deg -> -90deg => bottom to top
+          x = cx + Math.cos(a2)*R;
+          y = cy + Math.sin(a2)*R;
+          ang = a2 + Math.PI;
+        } else {
+          const t = (p-0.72)/0.28;
+          x = cx;
+          y = cy - R - t*h*0.4;
+          ang = -Math.PI/2;
+        }
+        break;
+      }
+    }
+    return { x, y, angle: ang };
+  };
+}
+
+// ============ INPUT ============
+function pressBlink(side) {
+  if (!game || game.crashed || game.judged || game.success) return;
+  game.blinker = side;
+  game.blinkerStartT = game.t;
+  game.decisionMade = true;
+}
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') pressBlink('left');
+  if (e.key === 'ArrowRight') pressBlink('right');
+});
+document.getElementById('leftBtn').addEventListener('click', () => pressBlink('left'));
+document.getElementById('rightBtn').addEventListener('click', () => pressBlink('right'));
+
+// ============ MAIN LOOP ============
+function loop(now) {
+  if (!game) return;
+  const dt = Math.min(50, now - game.lastTime);
+  game.lastTime = now;
+  update(dt);
+  draw();
+  if (!game.done) requestAnimationFrame(loop);
+}
+
+function update(dt) {
+  game.t += dt;
+  game.flashTimer += dt;
+  if (game.flashTimer > 250) { game.flashOn = !game.flashOn; game.flashTimer = 0; }
+
+  if (game.crashPhase) {
+    game.crashTimer += dt;
+    advanceCrashPhase();
+    return;
+  }
+  if (game.successTimer > 0) {
+    game.successTimer -= dt;
+    if (game.successTimer <= 0) showSuccess();
+    return;
+  }
+
+  // advance car along path
+  game.progress += game.speed * dt;
+  if (game.progress > 1) game.progress = 1;
+  const pos = game.pathFn(game.progress);
+  game.car.x = pos.x;
+  game.car.y = pos.y;
+  game.car.angle = pos.angle;
+
+  // judge at maneuver start
+  if (!game.judged && game.progress >= game.maneuverStart) {
+    judge();
+  }
+
+  // finish case
+  if (!game.judged && game.progress >= 1) {
+    judge(); // safety
+  }
+  if (game.judged && !game.crashPhase && !game.success && game.progress >= 1) {
+    game.success = true;
+    game.successTimer = 600;
+  }
+}
+
+function judge() {
+  game.judged = true;
+  const c = game.caseDef;
+  // Required: blinker matches expected, activated at least 3s before maneuver start
+  // 3 seconds in real time. progress per ms = game.speed. progress for 3s = game.speed*3000.
+  // Time to maneuver from when blink started:
+  const blinkStartProgress = game.blinkerStartT * game.speed; // approximate progress when blink began (since t=0 at case start)
+  // More accurate: we know game.maneuverStart progress, and we need blinker.startT to be at least 3000ms before now, AND blink must have been on continuously.
+  // Simplest correctness check:
+  const okSide = game.blinker === c.expected;
+  const blinkLeadMs = game.blinker ? (game.t - game.blinkerStartT) : 0;
+  const okLead = blinkLeadMs >= 3000;
+  const okEarly = blinkLeadMs <= 12000; // not absurdly early
+  if (okSide && okLead && okEarly) {
+    // success path - keep driving until end
+    return;
+  }
+  // failure
+  triggerCrash();
+}
+
+function triggerCrash() {
+  game.crashPhase = 'crash';
+  game.crashTimer = 0;
+}
+
+function advanceCrashPhase() {
+  if (game.crashPhase === 'crash' && game.crashTimer > 1400) {
+    game.crashPhase = 'wasted';
+    game.crashTimer = 0;
+  } else if (game.crashPhase === 'wasted' && game.crashTimer > 1800) {
+    game.crashPhase = 'fade';
+    game.crashTimer = 0;
+  } else if (game.crashPhase === 'fade' && game.crashTimer > 700) {
+    game.crashPhase = 'jail';
+    game.crashTimer = 0;
+  } else if (game.crashPhase === 'jail' && game.crashTimer > 2200) {
+    game.crashPhase = 'done';
+    showFailure();
+  }
+}
+
+// ============ DRAWING ============
+function draw() {
+  const w = W(), h = H();
+  ctx.clearRect(0,0,w,h);
+
+  // road background
+  drawScene();
+
+  // draw the car
+  drawCar(game.car.x, game.car.y, game.car.angle);
+
+  // draw blinker indicators on car
+  drawBlinkers();
+
+  // crash overlay
+  if (game.crashPhase) drawCrashOverlay();
+}
+
+function drawScene() {
+  const w = W(), h = H();
+  const c = game.caseDef;
+  // grass
+  ctx.fillStyle = '#4a7a3a';
+  ctx.fillRect(0,0,w,h);
+
+  ctx.save();
+  switch(c.pathType) {
+    case 'laneChangeRight':
+    case 'laneChangeLeft': {
+      // motorway: 3 lanes horizontal
+      ctx.fillStyle = '#3a3a3a';
+      ctx.fillRect(0, h*0.35, w, h*0.4);
+      // lane lines
+      ctx.strokeStyle = '#fff';
+      ctx.setLineDash([15, 12]);
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, h*0.5); ctx.lineTo(w, h*0.5);
+      ctx.moveTo(0, h*0.65); ctx.lineTo(w, h*0.65);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // edges
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(0, h*0.35); ctx.lineTo(w, h*0.35);
+      ctx.moveTo(0, h*0.75); ctx.lineTo(w, h*0.75);
+      ctx.stroke();
+      // other car (the one that will rear-end us)
+      if (!game.crashPhase || game.crashPhase === 'crash') {
+        const otherX = game.car.x - 90;
+        const otherY = c.pathType === 'laneChangeRight' ? h*0.65 : h*0.45;
+        drawOtherCar(otherX, otherY, 0, '#c0392b');
+      }
+      break;
+    }
+    case 'exit': {
+      // motorway with exit ramp
+      ctx.fillStyle = '#3a3a3a';
+      ctx.fillRect(0, h*0.35, w, h*0.25);
+      // exit ramp curve
+      ctx.beginPath();
+      ctx.moveTo(w*0.55, h*0.6);
+      ctx.quadraticCurveTo(w*0.75, h*0.7, w, h*0.95);
+      ctx.lineTo(w, h*1.05);
+      ctx.quadraticCurveTo(w*0.75, h*0.85, w*0.55, h*0.75);
+      ctx.closePath();
+      ctx.fill();
+      // lines
+      ctx.strokeStyle = '#fff';
+      ctx.setLineDash([15, 12]);
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, h*0.475); ctx.lineTo(w, h*0.475);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // pedestrian by exit
+      drawPedestrian(w*0.85, h*0.86);
+      break;
+    }
+    case 'park': {
+      ctx.fillStyle = '#3a3a3a';
+      ctx.fillRect(0, h*0.35, w, h*0.3);
+      // sidewalk
+      ctx.fillStyle = '#bdbdbd';
+      ctx.fillRect(0, h*0.65, w, h*0.1);
+      // parked cars
+      drawOtherCar(w*0.15, h*0.6, 0, '#666');
+      drawOtherCar(w*0.85, h*0.6, 0, '#666');
+      // cyclist behind
+      if (!game.crashPhase) drawCyclist(game.car.x - 80, h*0.55);
+      break;
+    }
+    case 'turnRight':
+    case 'turnLeft': {
+      // intersection
+      ctx.fillStyle = '#3a3a3a';
+      ctx.fillRect(w*0.4, 0, w*0.2, h);
+      ctx.fillRect(0, h*0.35, w, h*0.2);
+      // crosswalk
+      ctx.fillStyle = '#fff';
+      for (let i=0;i<6;i++) {
+        ctx.fillRect(w*0.4 + i*(w*0.2/6), h*0.32, w*0.18/12, 6);
+      }
+      // pedestrian on right side
+      if (c.pathType === 'turnRight') drawPedestrian(w*0.62, h*0.4);
+      // car behind for left turn crash
+      if (c.pathType === 'turnLeft' && (!game.crashPhase || game.crashPhase==='crash')) {
+        drawOtherCar(game.car.x, game.car.y + 70, -Math.PI/2, '#c0392b');
+      }
+      break;
+    }
+    case 'roundabout1':
+    case 'roundabout2': {
+      const cx = w*0.5, cy = h*0.5, R = Math.min(w,h)*0.22;
+      // road circle
+      ctx.fillStyle = '#3a3a3a';
+      ctx.beginPath();
+      ctx.arc(cx, cy, R+25, 0, Math.PI*2);
+      ctx.fill();
+      // grass center
+      ctx.fillStyle = '#4a7a3a';
+      ctx.beginPath();
+      ctx.arc(cx, cy, R-25, 0, Math.PI*2);
+      ctx.fill();
+      // entry/exit roads (4)
+      ctx.fillStyle = '#3a3a3a';
+      ctx.fillRect(cx-25, cy+R-5, 50, h*0.5); // bottom
+      ctx.fillRect(cx-25, 0, 50, cy-R+5); // top
+      ctx.fillRect(cx+R-5, cy-25, w*0.5, 50); // right
+      ctx.fillRect(0, cy-25, cx-R+5, 50); // left
+      // stroller for roundabout1 crash
+      if (c.pathType === 'roundabout1') drawStroller(cx + R + 60, cy + 15);
+      // cyclist for roundabout2 crash, near right exit
+      if (c.pathType === 'roundabout2') drawCyclist(cx + R + 40, cy);
+      break;
+    }
+  }
+  ctx.restore();
+}
+
+function drawCar(x, y, angle) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(angle);
+  // body
+  let color = '#3498db';
+  if (state.car === 'BMW') color = '#1a1a1a';
+  if (state.car === 'Tesla') color = '#e0e0e0';
+  if (state.car === 'Stasjonsvogn') color = '#2d6a2d';
+  ctx.fillStyle = color;
+  ctx.fillRect(-22, -12, 44, 24);
+  // windshield
+  ctx.fillStyle = 'rgba(150,200,255,0.6)';
+  ctx.fillRect(6, -10, 10, 20);
+  // back window
+  ctx.fillRect(-16, -10, 8, 20);
+  // outline
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(-22, -12, 44, 24);
+  ctx.restore();
+}
+
+function drawOtherCar(x, y, angle, color) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(angle);
+  ctx.fillStyle = color;
+  ctx.fillRect(-20, -11, 40, 22);
+  ctx.fillStyle = 'rgba(150,200,255,0.5)';
+  ctx.fillRect(4, -9, 9, 18);
+  ctx.strokeStyle = '#000';
+  ctx.strokeRect(-20, -11, 40, 22);
+  ctx.restore();
+}
+
+function drawPedestrian(x, y) {
+  ctx.save();
+  ctx.fillStyle = '#f1c27d';
+  ctx.beginPath(); ctx.arc(x, y-8, 5, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#c0392b';
+  ctx.fillRect(x-4, y-3, 8, 12);
+  ctx.fillStyle = '#1a1a1a';
+  ctx.fillRect(x-4, y+9, 3, 6);
+  ctx.fillRect(x+1, y+9, 3, 6);
+  ctx.restore();
+}
+
+function drawCyclist(x, y) {
+  ctx.save();
+  // wheels
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(x-8, y+5, 6, 0, Math.PI*2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(x+8, y+5, 6, 0, Math.PI*2); ctx.stroke();
+  // frame
+  ctx.beginPath(); ctx.moveTo(x-8, y+5); ctx.lineTo(x+2, y-3); ctx.lineTo(x+8, y+5); ctx.stroke();
+  // rider
+  ctx.fillStyle = '#f39c12';
+  ctx.fillRect(x-3, y-10, 6, 8);
+  ctx.fillStyle = '#f1c27d';
+  ctx.beginPath(); ctx.arc(x, y-13, 3, 0, Math.PI*2); ctx.fill();
+  ctx.restore();
+}
+
+function drawStroller(x, y) {
+  ctx.save();
+  ctx.fillStyle = '#e91e63';
+  ctx.fillRect(x-10, y-8, 20, 14);
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(x-8, y-6, 16, 6);
+  ctx.strokeStyle = '#000';
+  ctx.beginPath(); ctx.arc(x-7, y+8, 4, 0, Math.PI*2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(x+7, y+8, 4, 0, Math.PI*2); ctx.stroke();
+  // handle
+  ctx.beginPath(); ctx.moveTo(x+10, y-8); ctx.lineTo(x+18, y-12); ctx.stroke();
+  ctx.restore();
+}
+
+function drawBlinkers() {
+  if (!game.blinker) return;
+  if (!game.flashOn) return;
+  const x = game.car.x, y = game.car.y, a = game.car.angle;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(a);
+  ctx.fillStyle = '#ffb300';
+  if (game.blinker === 'left') {
+    ctx.fillRect(18, -14, 6, 4);
+    ctx.fillRect(-22, -14, 6, 4);
+  } else {
+    ctx.fillRect(18, 10, 6, 4);
+    ctx.fillRect(-22, 10, 6, 4);
+  }
+  ctx.restore();
+}
+
+function drawCrashOverlay() {
+  const w = W(), h = H();
+  if (game.crashPhase === 'crash') {
+    // shake + impact lines
+    const shakeX = (Math.random()-0.5)*10;
+    const shakeY = (Math.random()-0.5)*10;
+    ctx.save();
+    ctx.translate(shakeX, shakeY);
+    // impact star
+    ctx.fillStyle = 'rgba(255,255,0,0.6)';
+    for (let i=0;i<8;i++) {
+      ctx.beginPath();
+      const a = i*Math.PI/4;
+      ctx.moveTo(game.car.x, game.car.y);
+      ctx.lineTo(game.car.x + Math.cos(a)*40, game.car.y + Math.sin(a)*40);
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = 'rgba(255,200,0,0.8)';
+      ctx.stroke();
+    }
+    // BOOM text
+    ctx.fillStyle = '#fff';
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 4;
+    ctx.font = 'bold 50px Impact, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.strokeText('KRASJ!', game.car.x, game.car.y - 30);
+    ctx.fillText('KRASJ!', game.car.x, game.car.y - 30);
+    ctx.restore();
+  }
+  if (game.crashPhase === 'wasted') {
+    ctx.fillStyle = 'rgba(0,0,0,0.7)';
+    ctx.fillRect(0,0,w,h);
+    const t = Math.min(1, game.crashTimer/500);
+    const scale = 0.5 + t*0.8;
+    ctx.save();
+    ctx.translate(w/2, h/2);
+    ctx.scale(scale, scale);
+    ctx.font = 'bold 90px Impact, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#c0392b';
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 4;
+    ctx.strokeText('WASTED', 0, 20);
+    ctx.fillText('WASTED', 0, 20);
+    ctx.restore();
+  }
+  if (game.crashPhase === 'fade') {
+    const a = Math.min(1, game.crashTimer/700);
+    ctx.fillStyle = `rgba(0,0,0,${a})`;
+    ctx.fillRect(0,0,w,h);
+  }
+  if (game.crashPhase === 'jail') {
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(0,0,w,h);
+    // cell floor
+    ctx.fillStyle = '#3a3a3a';
+    ctx.fillRect(w*0.15, h*0.7, w*0.7, h*0.2);
+    // back wall
+    ctx.fillStyle = '#5a5a5a';
+    ctx.fillRect(w*0.15, h*0.25, w*0.7, h*0.45);
+    // bars
+    ctx.fillStyle = '#888';
+    for (let i=0; i<8; i++) {
+      const x = w*0.18 + i*(w*0.65/8);
+      ctx.fillRect(x, h*0.2, 8, h*0.55);
+    }
+    // top bar
+    ctx.fillRect(w*0.15, h*0.18, w*0.7, 8);
+    ctx.fillRect(w*0.15, h*0.73, w*0.7, 8);
+    // prisoner
+    const px = w*0.5, py = h*0.55;
+    ctx.fillStyle = '#f1c27d';
+    ctx.beginPath(); ctx.arc(px, py-20, 10, 0, Math.PI*2); ctx.fill();
+    // sad mouth
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(px, py-15, 4, Math.PI, 0); ctx.stroke();
+    // eyes
+    ctx.fillStyle = '#000';
+    ctx.fillRect(px-4, py-22, 2, 2);
+    ctx.fillRect(px+2, py-22, 2, 2);
+    // body - striped
+    for (let i=0;i<5;i++){
+      ctx.fillStyle = i%2===0 ? '#fff' : '#1a1a1a';
+      ctx.fillRect(px-12, py-10+i*5, 24, 5);
+    }
+    // arms
+    ctx.fillStyle = '#f1c27d';
+    ctx.fillRect(px-16, py-8, 4, 14);
+    ctx.fillRect(px+12, py-8, 4, 14);
+    // text
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 16px Georgia';
+    ctx.textAlign = 'center';
+    ctx.fillText('FENGSEL · §22', w/2, h*0.92);
+  }
+}
+
+// ============ FAILURE / SUCCESS HANDLING ============
+function showFailure() {
+  game.done = true;
+  state.failedCases++;
+  // killed counter based on crash type
+  const c = game.caseDef;
+  if (c.crashType === 'pedestrian') state.killed++;
+  if (c.crashType === 'cyclist') state.killed++;
+  if (c.crashType === 'stroller') state.killed += 2;
+  state.errors += state.isPremium ? 2 : 1;
+
+  document.getElementById('gamePanel').classList.add('hidden');
+  const fp = document.getElementById('failurePanel');
+  fp.classList.remove('hidden');
+  document.getElementById('absurdMsg').textContent = c.absurd[Math.floor(Math.random()*c.absurd.length)];
+  document.getElementById('officialRule').innerHTML = '<b>Offisiell regel:</b> ' + c.rule;
+  const note = document.getElementById('premiumNoteWrap');
+  note.innerHTML = state.isPremium ? '<div class="premium-note">Premiumtillegg anvendt (×2 trekk).</div>' : '';
+}
+
+function showSuccess() {
+  game.done = true;
+  document.getElementById('gamePanel').classList.add('hidden');
+  document.getElementById('successPanel').classList.remove('hidden');
+}
+
+document.getElementById('retryBtn').addEventListener('click', () => {
+  // undo this case's failure tally so retry doesn't double count
+  state.failedCases--;
+  const c = CASES[state.caseIndex];
+  if (c.crashType === 'pedestrian') state.killed--;
+  if (c.crashType === 'cyclist') state.killed--;
+  if (c.crashType === 'stroller') state.killed -= 2;
+  state.errors -= state.isPremium ? 2 : 1;
+  document.getElementById('failurePanel').classList.add('hidden');
+  startCase(state.caseIndex);
+});
+
+document.getElementById('nextBtn').addEventListener('click', advanceCase);
+document.getElementById('continueBtn').addEventListener('click', advanceCase);
+
+function advanceCase() {
+  document.getElementById('failurePanel').classList.add('hidden');
+  document.getElementById('successPanel').classList.add('hidden');
+  if (state.caseIndex + 1 >= CASES.length) {
+    showCertificate();
+  } else {
+    startCase(state.caseIndex + 1);
+  }
+}
+
+// ============ CERTIFICATE ============
+function showCertificate() {
+  document.getElementById('gamePanel').classList.add('hidden');
+  const ep = document.getElementById('endPanel');
+  ep.classList.remove('hidden');
+  document.getElementById('certName').textContent = state.playerName;
+  document.getElementById('statFailed').textContent = state.failedCases;
+  document.getElementById('statKilled').textContent = state.killed;
+  document.getElementById('statCar').textContent = state.car;
+  // grade
+  const errs = state.errors;
+  let grade;
+  if (errs === 0) grade = 'A';
+  else if (errs <= 1) grade = 'B';
+  else if (errs <= 2) grade = 'C';
+  else if (errs <= 4) grade = 'D';
+  else if (errs <= 6) grade = 'E';
+  else grade = 'F';
+  document.getElementById('gradeBox').textContent = grade;
+  if (['A','B','C'].includes(grade)) launchConfetti();
+}
+
+function launchConfetti() {
+  const colors = ['#00509e','#f9a825','#c0392b','#2d7a2d','#fff'];
+  for (let i=0;i<80;i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left = (Math.random()*100) + 'vw';
+    el.style.background = colors[Math.floor(Math.random()*colors.length)];
+    el.style.transform = `rotate(${Math.random()*360}deg)`;
+    document.body.appendChild(el);
+    const dur = 2500 + Math.random()*2000;
+    el.animate([
+      { transform: `translateY(0) rotate(0deg)` },
+      { transform: `translateY(110vh) rotate(${720+Math.random()*360}deg)` }
+    ], { duration: dur, easing: 'cubic-bezier(.2,.6,.4,1)' });
+    setTimeout(() => el.remove(), dur);
+  }
+}
+
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  const cert = document.getElementById('certificate');
+  if (window.html2canvas) {
+    html2canvas(cert, {backgroundColor: '#fdfcf6', scale: 2}).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'blinklysbevis.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  } else {
+    alert('Nedlasting krever html2canvas (sjekk internettforbindelse).');
+  }
+});
+
+document.getElementById('restartBtn').addEventListener('click', () => {
+  state.caseIndex = 0;
+  state.failedCases = 0;
+  state.killed = 0;
+  state.errors = 0;
+  document.getElementById('endPanel').classList.add('hidden');
+  document.getElementById('introPanel').classList.remove('hidden');
+});
+
+// initial canvas size
+window.addEventListener('load', resizeCanvas);
+</script>
+</body>
+</html>
