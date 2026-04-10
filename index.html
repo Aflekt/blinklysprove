@@ -832,6 +832,21 @@ function easeInOut(t) {
   return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2;
 }
 
+// Shared bezier for the exit ramp — used by visual draw, player path, and obstacle
+function exitBezier(t) {
+  const w = W(), h = H();
+  const p0x = w*0.28, p0y = h*0.55;
+  const p1x = w*0.58, p1y = h*0.55;
+  const p2x = w*0.88, p2y = h*0.78;
+  const p3x = w*1.12, p3y = h*1.06;
+  const u = 1 - t;
+  const x = u*u*u*p0x + 3*u*u*t*p1x + 3*u*t*t*p2x + t*t*t*p3x;
+  const y = u*u*u*p0y + 3*u*u*t*p1y + 3*u*t*t*p2y + t*t*t*p3y;
+  const dx = 3*u*u*(p1x-p0x) + 6*u*t*(p2x-p1x) + 3*t*t*(p3x-p2x);
+  const dy = 3*u*u*(p1y-p0y) + 6*u*t*(p2y-p1y) + 3*t*t*(p3y-p2y);
+  return { x, y, angle: Math.atan2(dy, dx), p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y };
+}
+
 const OBSTACLE_CLEAR_MS = 5500;
 function isObstacleClear(t) {
   const c = game.caseDef;
@@ -855,10 +870,8 @@ function getPlayerPos() {
       return { x: w*0.35, y: sy + (ey-sy)*e, angle: 0 };
     }
     case 'exit': {
-      // Start in the right (slow) lane of the main road, exit down the ramp
-      const sx = w*0.30, sy = h*0.575;
-      const ex = w*0.92, ey = h*0.98;
-      return { x: sx + (ex-sx)*e, y: sy + (ey-sy)*e, angle: e * 0.7 };
+      // Player follows the exit-ramp bezier
+      return exitBezier(easeInOut(mp));
     }
     case 'park': {
       const sy = h*0.45, ey = h*0.62;
@@ -1098,22 +1111,25 @@ function drawScene() {
       break;
     }
     case 'exit': {
-      // Main road
+      // Main road horizontal strip
       ctx.fillStyle = '#3a3a3a';
       ctx.fillRect(0, h*0.35, w, h*0.30);
-      // Exit ramp peeling off the bottom-right of the main road, fully connected
-      ctx.fillStyle = '#3a3a3a';
+      // Exit ramp drawn as a thick stroked bezier — same curve the player drives along
+      const b = exitBezier(0);
+      ctx.strokeStyle = '#3a3a3a';
+      ctx.lineWidth = h * 0.13;
+      ctx.lineCap = 'butt';
       ctx.beginPath();
-      // Top edge of ramp (begins where main road bottom is, curves down-right off screen)
-      ctx.moveTo(w*0.40, h*0.65);
-      ctx.bezierCurveTo(w*0.65, h*0.66, w*0.85, h*0.85, w*1.02, h*1.02);
-      // Right side off-screen
-      ctx.lineTo(w*1.02, h*1.20);
-      // Bottom edge of ramp back to start
-      ctx.bezierCurveTo(w*0.85, h*1.05, w*0.65, h*0.85, w*0.40, h*0.82);
-      ctx.closePath();
-      ctx.fill();
-      // Lane divider on main road (dashed) — stops before the gore point
+      ctx.moveTo(b.p0x, b.p0y);
+      ctx.bezierCurveTo(b.p1x, b.p1y, b.p2x, b.p2y, b.p3x, b.p3y);
+      ctx.stroke();
+      // Top edge of road
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(0, h*0.35); ctx.lineTo(w, h*0.35);
+      ctx.stroke();
+      // Lane divider (dashed, scrolls)
       ctx.strokeStyle = '#fff';
       ctx.setLineDash([15, 12]);
       ctx.lineDashOffset = -scrollOffset;
@@ -1123,19 +1139,11 @@ function drawScene() {
       ctx.stroke();
       ctx.setLineDash([]);
       ctx.lineDashOffset = 0;
-      // Solid white edges
+      // Bottom edge of through-traffic road (only to the left of where ramp peels off)
       ctx.strokeStyle = '#fff';
       ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.moveTo(0, h*0.35); ctx.lineTo(w, h*0.35);     // top edge of main road
-      ctx.moveTo(0, h*0.65); ctx.lineTo(w*0.40, h*0.65); // bottom edge of main road, ends at the ramp split
-      ctx.stroke();
-      // Solid edge along the inside of the ramp (gore)
-      ctx.strokeStyle = '#fff';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(w*0.40, h*0.65);
-      ctx.bezierCurveTo(w*0.65, h*0.66, w*0.85, h*0.85, w*1.02, h*1.02);
+      ctx.moveTo(0, h*0.65); ctx.lineTo(w*0.55, h*0.65);
       ctx.stroke();
       break;
     }
@@ -1214,10 +1222,11 @@ function drawObstacle() {
       break;
     }
     case 'exit': {
-      // Slow car ahead in the right lane that needs to clear before player exits
-      const startX = w*0.05;
-      const px = startX + (t/1000) * (w*0.13);
-      drawOtherCar(px, h*0.575, 0, '#c0392b');
+      // Slow car ahead on the exit ramp — sits on the same bezier as the player,
+      // starts ahead of the player (param 0.30) and slides further along, off-screen.
+      const obT = Math.min(1, 0.30 + (t/1000) * 0.18);
+      const ob = exitBezier(obT);
+      drawOtherCar(ob.x, ob.y, ob.angle, '#c0392b');
       break;
     }
     case 'park': {
