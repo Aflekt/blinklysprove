@@ -6,28 +6,23 @@
 <title>Statens Blinklysdirektorat – Obligatorisk Blinklysprøve</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-  /* ===== Vegvesen-inspired design system ===== */
+  /* ===== Vegvesen-accurate design system ===== */
   :root {
     --vv-bg: #ffffff;
-    --vv-bg-alt: #f3f3f3;
-    --vv-bg-soft: #faf9f7;
-    --vv-text: #1a1a1a;
-    --vv-text-soft: #585858;
-    --vv-border: #d8d8d8;
-    --vv-border-soft: #e8e8e8;
-    --vv-link: #0062ba;
-    --vv-link-hover: #00468a;
-    --vv-accent: #ffd520; /* road sign yellow */
-    --vv-accent-dark: #e3bb00;
+    --vv-bg-cream: #fff5e6;          /* hero / accent stripe */
+    --vv-bg-light: #f5f5f5;          /* light section bg */
+    --vv-text: #444f55;              /* primary text + header bg */
+    --vv-text-soft: #6b757a;
+    --vv-border: #e3e3e3;
     --vv-danger: #c8102e;
     --vv-danger-soft: #fbe9ec;
-    --vv-success: #047857;
-    --vv-dark: #1a1a1a;
+    --vv-success: #2d6a4f;
+    --vv-link: #444f55;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    background: var(--vv-bg-alt);
+    font-family: "LFT Etica", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    background: #fff;
     color: var(--vv-text);
     min-height: 100vh;
     overflow-x: hidden;
@@ -36,163 +31,127 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ===== Header (vegvesen style) ===== */
-  .topbar {
-    background: var(--vv-dark);
-    color: #fff;
-    font-size: 12px;
-    padding: 6px 0;
-  }
-  .topbar .inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .topbar a { color: #fff; text-decoration: none; opacity: 0.85; margin-left: 16px; }
+  /* ===== Header (matches vegvesen.no) ===== */
   header.vv-header {
-    background: #fff;
-    border-bottom: 1px solid var(--vv-border);
+    background: var(--vv-text);
+    color: #fff;
+    padding: 18px 0;
   }
   header.vv-header .inner {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 22px 20px;
+    padding: 0 32px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    gap: 16px;
   }
   .vv-logo {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
   }
-  .vv-logo .mark {
-    width: 48px;
-    height: 48px;
-    background: var(--vv-dark);
-    color: var(--vv-accent);
+  .vv-logo .crest {
+    width: 44px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 26px;
-    font-weight: 900;
-    border-radius: 2px;
-    letter-spacing: -1px;
+    font-size: 36px;
+    line-height: 1;
   }
-  .vv-logo .text h1 {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--vv-dark);
-    letter-spacing: -0.2px;
-    line-height: 1.2;
-  }
-  .vv-logo .text p {
-    font-size: 12px;
-    color: var(--vv-text-soft);
-    margin-top: 2px;
-  }
-  nav.vv-nav {
-    background: #fff;
-    border-bottom: 1px solid var(--vv-border);
-  }
-  nav.vv-nav .inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-  }
-  nav.vv-nav a {
-    color: var(--vv-text);
-    text-decoration: none;
-    padding: 14px 18px;
-    font-size: 15px;
-    font-weight: 500;
-    border-bottom: 3px solid transparent;
-    white-space: nowrap;
-  }
-  nav.vv-nav a:hover { border-bottom-color: var(--vv-accent); }
-  nav.vv-nav a.active {
-    border-bottom-color: var(--vv-dark);
-    font-weight: 600;
+  .vv-logo .text {
+    color: #fff;
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: 0.2px;
   }
 
-  /* ===== Hero / breadcrumb ===== */
-  .breadcrumb {
-    background: var(--vv-bg-alt);
-    padding: 14px 20px;
-    font-size: 13px;
-    color: var(--vv-text-soft);
+  /* ===== Hero ===== */
+  .hero {
+    background: #fff;
+    padding: 60px 32px 80px;
+    text-align: center;
   }
-  .breadcrumb .inner { max-width: 1200px; margin: 0 auto; }
-  .breadcrumb a { color: var(--vv-link); text-decoration: none; }
-  .breadcrumb a:hover { text-decoration: underline; }
+  .hero h1 {
+    font-size: 48px;
+    font-weight: 400;
+    color: var(--vv-text);
+    line-height: 1.15;
+    max-width: 760px;
+    margin: 0 auto 24px;
+  }
+  .hero p.lead {
+    font-size: 18px;
+    color: var(--vv-text);
+    max-width: 640px;
+    margin: 0 auto 28px;
+    line-height: 1.5;
+  }
+  .cream-strip {
+    background: var(--vv-bg-cream);
+    padding: 50px 32px 60px;
+  }
+  .cream-strip .inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
 
   .container {
-    max-width: 900px;
+    max-width: 760px;
     margin: 0 auto;
-    padding: 30px 20px 60px;
+    padding: 50px 32px 60px;
   }
 
-  /* ===== Cards / panels ===== */
+  /* ===== Cards / sections ===== */
   .card {
     background: #fff;
-    border: 1px solid var(--vv-border);
-    padding: 32px;
-    margin-bottom: 24px;
-    border-radius: 2px;
+    padding: 0;
+    margin-bottom: 36px;
   }
   .card h2 {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--vv-dark);
-    margin-bottom: 14px;
-    letter-spacing: -0.4px;
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--vv-text);
+    margin-bottom: 18px;
     line-height: 1.2;
   }
   .card h3 {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--vv-dark);
-    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--vv-text);
+    margin-top: 28px;
     margin-bottom: 10px;
   }
-  .card p { margin-bottom: 14px; color: var(--vv-text); }
-  .card a { color: var(--vv-link); }
-
-  .lead {
-    font-size: 18px;
+  .card p {
+    margin-bottom: 16px;
     color: var(--vv-text);
-    margin-bottom: 18px;
-    line-height: 1.45;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .lead {
+    font-size: 19px;
+    color: var(--vv-text);
+    margin-bottom: 22px;
+    line-height: 1.5;
   }
 
   .info-box {
-    background: #eef4fb;
-    border-left: 4px solid var(--vv-link);
-    padding: 16px 20px;
-    margin: 18px 0;
-    font-size: 14px;
-    border-radius: 0 2px 2px 0;
-  }
-  .info-box.warning {
-    background: #fff8db;
-    border-left-color: var(--vv-accent-dark);
+    background: var(--vv-bg-light);
+    border-left: 4px solid var(--vv-text);
+    padding: 18px 22px;
+    margin: 20px 0;
+    font-size: 15px;
+    line-height: 1.5;
   }
   .info-box.danger {
     background: var(--vv-danger-soft);
     border-left-color: var(--vv-danger);
   }
-  .info-box b { color: var(--vv-dark); }
+  .info-box b { color: var(--vv-text); font-weight: 700; }
   .info-box .ref {
     display: block;
-    margin-top: 6px;
-    font-size: 12px;
+    margin-top: 8px;
+    font-size: 13px;
     color: var(--vv-text-soft);
     font-style: italic;
   }
@@ -200,12 +159,12 @@
   /* ===== Buttons ===== */
   .btn {
     display: inline-block;
-    background: var(--vv-dark);
+    background: var(--vv-text);
     color: #fff;
-    border: 2px solid var(--vv-dark);
-    padding: 12px 24px;
-    font-size: 15px;
-    font-weight: 600;
+    border: 2px solid var(--vv-text);
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: 700;
     font-family: inherit;
     cursor: pointer;
     border-radius: 2px;
@@ -213,71 +172,71 @@
     transition: background 0.12s;
     text-decoration: none;
   }
-  .btn:hover { background: #000; }
-  .btn:disabled { background: #999; border-color: #999; cursor: not-allowed; }
+  .btn:hover { background: #2f3a40; border-color: #2f3a40; }
+  .btn:disabled { background: #b0b6ba; border-color: #b0b6ba; cursor: not-allowed; }
   .btn.primary {
-    background: var(--vv-accent);
-    color: var(--vv-dark);
-    border-color: var(--vv-accent);
+    background: var(--vv-text);
+    color: #fff;
+    border-color: var(--vv-text);
   }
-  .btn.primary:hover { background: var(--vv-accent-dark); border-color: var(--vv-accent-dark); }
   .btn.secondary {
     background: #fff;
-    color: var(--vv-dark);
-    border-color: var(--vv-dark);
+    color: var(--vv-text);
+    border-color: var(--vv-text);
   }
-  .btn.secondary:hover { background: var(--vv-bg-alt); }
+  .btn.secondary:hover { background: var(--vv-bg-light); color: var(--vv-text); }
 
   /* ===== Form ===== */
   label.form-label {
     display: block;
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--vv-dark);
-    margin-top: 18px;
-    margin-bottom: 6px;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--vv-text);
+    margin-top: 20px;
+    margin-bottom: 8px;
   }
   input.vv-input {
-    border: 1px solid #aaa;
-    padding: 12px 14px;
-    font-size: 15px;
+    border: 1px solid #b0b6ba;
+    padding: 14px 16px;
+    font-size: 16px;
     font-family: inherit;
+    color: var(--vv-text);
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
     border-radius: 2px;
     background: #fff;
   }
   input.vv-input:focus {
-    outline: 2px solid var(--vv-link);
+    outline: 2px solid var(--vv-text);
     outline-offset: 1px;
-    border-color: var(--vv-link);
+    border-color: var(--vv-text);
   }
 
   /* ===== Car selection ===== */
   .car-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 14px;
     margin: 18px 0 8px;
   }
   .car-card {
-    border: 2px solid var(--vv-border);
+    border: 1px solid var(--vv-border);
     background: #fff;
-    padding: 20px 14px;
+    padding: 22px 14px;
     text-align: center;
     cursor: pointer;
     border-radius: 2px;
     transition: all 0.12s;
   }
-  .car-card:hover { border-color: var(--vv-dark); background: var(--vv-bg-soft); }
+  .car-card:hover { border-color: var(--vv-text); background: var(--vv-bg-cream); }
   .car-card.selected {
-    border-color: var(--vv-dark);
-    background: #fff8db;
-    box-shadow: inset 0 -4px 0 var(--vv-accent);
+    border-color: var(--vv-text);
+    background: var(--vv-bg-cream);
+    box-shadow: inset 0 -4px 0 var(--vv-text);
   }
   .car-card .ico { font-size: 38px; display: block; margin-bottom: 10px; }
-  .car-card .name { font-weight: 700; font-size: 15px; color: var(--vv-dark); }
-  .car-card .desc { font-size: 12px; color: var(--vv-text-soft); margin-top: 4px; }
+  .car-card .name { font-weight: 700; font-size: 15px; color: var(--vv-text); }
+  .car-card .desc { font-size: 13px; color: var(--vv-text-soft); margin-top: 4px; }
 
   /* ===== Game ===== */
   #gameWrap {
@@ -285,6 +244,7 @@
     background: #000;
     width: 100%;
     aspect-ratio: 4 / 3;
+    border: 1px solid var(--vv-border);
   }
   #gameCanvas {
     width: 100%;
@@ -292,24 +252,24 @@
     display: block;
   }
   .case-banner {
-    background: var(--vv-dark);
+    background: var(--vv-text);
     color: #fff;
-    padding: 14px 20px;
+    padding: 16px 22px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 16px;
     flex-wrap: wrap;
   }
-  .case-banner .case-title { font-size: 16px; font-weight: 600; }
-  .case-banner .case-num { font-size: 12px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.6px; }
+  .case-banner .case-title { font-size: 17px; font-weight: 700; }
+  .case-banner .case-num { font-size: 12px; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
   .case-banner .strikes {
     display: flex;
-    gap: 6px;
+    gap: 8px;
     align-items: center;
     font-size: 12px;
     text-transform: uppercase;
-    letter-spacing: 0.6px;
+    letter-spacing: 0.8px;
   }
   .strike-dot {
     width: 18px;
@@ -320,67 +280,68 @@
   }
   .strike-dot.lit { background: var(--vv-danger); border-color: var(--vv-danger); }
   .game-instructions {
-    background: var(--vv-bg-alt);
-    padding: 10px 20px;
-    font-size: 13px;
+    background: var(--vv-bg-light);
+    padding: 12px 22px;
+    font-size: 14px;
     color: var(--vv-text-soft);
     border-bottom: 1px solid var(--vv-border);
   }
   .blinker-buttons {
     display: none;
     justify-content: space-between;
-    padding: 12px;
-    background: var(--vv-dark);
+    padding: 14px;
+    background: var(--vv-text);
     gap: 12px;
   }
   .blinker-buttons button {
     flex: 1;
     padding: 24px 0;
-    font-size: 22px;
-    background: #2a2a2a;
-    border: 2px solid #555;
+    font-size: 20px;
+    background: #2f3a40;
+    border: 2px solid #6b757a;
     color: #fff;
-    border-radius: 4px;
+    border-radius: 2px;
     font-weight: 700;
     cursor: pointer;
+    font-family: inherit;
   }
-  .blinker-buttons button:active { background: var(--vv-accent); color: #000; border-color: var(--vv-accent); }
+  .blinker-buttons button:active { background: #fff; color: var(--vv-text); border-color: #fff; }
   @media (max-width: 768px) {
     .blinker-buttons { display: flex; }
-    .card { padding: 22px 18px; }
-    .card h2 { font-size: 22px; }
+    .container { padding: 32px 20px 40px; }
+    .hero { padding: 40px 20px 50px; }
+    .hero h1 { font-size: 32px; }
+    .card h2 { font-size: 24px; }
   }
 
   /* ===== Failure / Success ===== */
-  .failure-card { border-top: 4px solid var(--vv-danger); }
   .failure-card h2 { color: var(--vv-danger); }
   .absurd {
-    font-size: 19px;
-    margin: 16px 0;
-    color: var(--vv-dark);
+    font-size: 20px;
+    margin: 18px 0;
+    color: var(--vv-text);
     line-height: 1.5;
-    padding: 16px 20px;
-    background: var(--vv-bg-soft);
-    border-left: 4px solid var(--vv-dark);
+    padding: 20px 24px;
+    background: var(--vv-bg-cream);
+    border-left: 4px solid var(--vv-text);
   }
   .premium-note {
     display: inline-block;
     background: var(--vv-danger-soft);
     border: 1px solid var(--vv-danger);
     padding: 6px 12px;
-    font-size: 12px;
+    font-size: 13px;
     margin-top: 12px;
     color: var(--vv-danger);
-    font-weight: 600;
+    font-weight: 700;
     border-radius: 2px;
   }
-  .success-card { border-top: 4px solid var(--vv-success); }
   .success-card h2 { color: var(--vv-success); }
 
   /* ===== Certificate ===== */
   .certificate {
-    background: #fffdf5;
-    border: 2px solid var(--vv-dark);
+    background: var(--vv-bg-cream);
+    border: 2px solid var(--vv-text);
     padding: 50px 40px;
     text-align: center;
     position: relative;
@@ -389,15 +350,15 @@
     content: '';
     position: absolute;
     inset: 8px;
-    border: 1px solid var(--vv-dark);
+    border: 1px solid var(--vv-text);
     pointer-events: none;
   }
   .certificate .crest { font-size: 48px; }
   .certificate h2 {
     font-size: 26px;
-    color: var(--vv-dark);
+    color: var(--vv-text);
     margin: 12px 0 6px;
-    font-weight: 700;
+    font-weight: 400;
   }
   .certificate .sub {
     font-size: 13px;
@@ -409,19 +370,19 @@
   .certificate .name {
     font-size: 32px;
     margin: 14px 0;
-    border-bottom: 2px solid var(--vv-dark);
+    border-bottom: 2px solid var(--vv-text);
     display: inline-block;
     padding: 0 30px 8px;
-    font-family: Georgia, serif;
+    font-weight: 400;
   }
   .certificate .grade-box {
     display: inline-block;
     margin: 22px 0;
     padding: 18px 32px;
-    border: 4px solid var(--vv-dark);
+    border: 4px solid var(--vv-text);
     font-size: 56px;
-    font-weight: 900;
-    color: var(--vv-dark);
+    font-weight: 700;
+    color: var(--vv-text);
     background: #fff;
   }
   .certificate .stats {
@@ -436,8 +397,9 @@
   .certificate .stats div b {
     display: block;
     font-size: 22px;
-    color: var(--vv-dark);
+    color: var(--vv-text);
     margin-bottom: 2px;
+    font-weight: 700;
   }
   .certificate .signature {
     margin-top: 30px;
@@ -468,13 +430,13 @@
   .certificate .sig {
     font-family: "Brush Script MT", "Snell Roundhand", cursive;
     font-size: 26px;
-    border-top: 1px solid var(--vv-dark);
+    border-top: 1px solid var(--vv-text);
     padding-top: 4px;
     min-width: 220px;
-    color: var(--vv-dark);
+    color: var(--vv-text);
   }
   .certificate .sig span {
-    font-family: -apple-system, sans-serif;
+    font-family: inherit;
     font-size: 11px;
     color: var(--vv-text-soft);
     display: block;
@@ -493,88 +455,25 @@
 
   /* ===== Footer ===== */
   footer.vv-footer {
-    background: var(--vv-dark);
-    color: #cfcfcf;
-    padding: 40px 20px 20px;
-    margin-top: 40px;
-  }
-  footer.vv-footer .inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 24px;
-  }
-  footer.vv-footer h4 {
-    color: #fff;
-    font-size: 14px;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-  }
-  footer.vv-footer p, footer.vv-footer a {
-    color: #cfcfcf;
-    font-size: 13px;
-    text-decoration: none;
-    line-height: 1.6;
-  }
-  footer.vv-footer a:hover { color: #fff; }
-  footer.vv-footer .copy {
-    grid-column: 1 / -1;
+    background: var(--vv-text);
+    color: #d4d8da;
+    padding: 30px 32px;
+    margin-top: 60px;
     text-align: center;
-    font-size: 11px;
-    color: #888;
-    border-top: 1px solid #444;
-    padding-top: 16px;
-    margin-top: 16px;
+    font-size: 13px;
   }
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="inner">
-    <span>Norge.no  ·  En tjeneste fra Statens Blinklysdirektorat</span>
-    <span>
-      <a href="#">English</a>
-      <a href="#">Logg inn</a>
-    </span>
-  </div>
-</div>
-
 <header class="vv-header">
   <div class="inner">
     <div class="vv-logo">
-      <div class="mark">SB</div>
-      <div class="text">
-        <h1>Statens Blinklysdirektorat</h1>
-        <p>Vei · Trafikk · Retningsangivere · Sertifisering</p>
-      </div>
-    </div>
-    <div style="font-size:13px; color:var(--vv-text-soft); text-align:right;">
-      Telefon: 22 07 30 00<br>
-      Org.nr: 999 999 998
+      <div class="crest">🦁</div>
+      <div class="text">Statens blinklysdirektorat</div>
     </div>
   </div>
 </header>
-
-<nav class="vv-nav">
-  <div class="inner">
-    <a href="#">Trafikk</a>
-    <a href="#">Kjøretøy</a>
-    <a href="#">Førerkort</a>
-    <a href="#" class="active">Blinklysprøve</a>
-    <a href="#">Forskrifter</a>
-    <a href="#">Klage</a>
-    <a href="#">Om oss</a>
-  </div>
-</nav>
-
-<div class="breadcrumb">
-  <div class="inner">
-    <a href="#">Forside</a> › <a href="#">Førerkort</a> › <a href="#">Sertifisering</a> › <span>Obligatorisk blinklysprøve</span>
-  </div>
-</div>
 
 <div class="container">
 
@@ -708,25 +607,7 @@
 </div>
 
 <footer class="vv-footer">
-  <div class="inner">
-    <div>
-      <h4>Statens Blinklysdirektorat</h4>
-      <p>Postboks 14 Blinkveien<br>0032 Oslo<br>Org.nr: 999 999 998</p>
-    </div>
-    <div>
-      <h4>Kontakt</h4>
-      <p>Telefon: 22 07 30 00<br>E-post: post@blinklys.no<br>Åpningstid: 08:00–15:30</p>
-    </div>
-    <div>
-      <h4>Tjenester</h4>
-      <p><a href="#">Blinklysprøve</a><br><a href="#">Klage på vedtak</a><br><a href="#">Førerkortregister</a></p>
-    </div>
-    <div>
-      <h4>Om nettstedet</h4>
-      <p><a href="#">Personvernerklæring</a><br><a href="#">Informasjonskapsler</a><br><a href="#">Tilgjengelighet</a></p>
-    </div>
-    <div class="copy">© Statens Blinklysdirektorat · Sist oppdatert: 10. april 2026</div>
-  </div>
+  © Statens blinklysdirektorat
 </footer>
 
 <script>
