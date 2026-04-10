@@ -391,6 +391,138 @@
     .steering-wheel .hub { width: 20px; height: 20px; }
   }
 
+  /* ===== Tally display ===== */
+  .tally-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 22px;
+    padding: 10px 22px;
+    font-size: 12px;
+    color: var(--vv-text-soft);
+    border-bottom: 1px solid var(--vv-border);
+    background: #fafafa;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .tally-display b { color: var(--vv-text); font-weight: 700; font-size: 13px; }
+
+  /* ===== Police report reveal ===== */
+  .police-report {
+    background: #0d0d0d !important;
+    color: #d8d8d8 !important;
+    font-family: "Courier New", Consolas, monospace !important;
+    border: 2px solid #3a3a3a !important;
+    padding: 32px !important;
+  }
+  .police-report .report-header {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 3px;
+    border-bottom: 1px solid #555;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+  }
+  .police-report .report-meta {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 22px;
+    line-height: 1.6;
+  }
+  .police-report .report-section { margin: 22px 0; }
+  .police-report .report-section h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 8px;
+    border: none;
+  }
+  .police-report .report-section p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #cfcfcf;
+    margin-bottom: 8px;
+  }
+  .police-report .reveal-quote {
+    background: #1a1a1a;
+    border-left: 3px solid #c8102e;
+    padding: 12px 16px;
+    color: #fff !important;
+    font-style: italic;
+  }
+  .police-report .reveal-rant { color: #ff6666 !important; font-weight: 700; }
+  .police-report .reveal-rule { color: #8fb8e6 !important; font-size: 12px !important; }
+  .police-report .btn.primary {
+    background: #c8102e; color: #fff; border-color: #c8102e;
+  }
+  .police-report .btn.secondary {
+    background: #0d0d0d; color: #fff; border-color: #555;
+  }
+
+  /* ===== Vehicle analysis report ===== */
+  .vehicle-report {
+    margin-top: 36px;
+    padding: 28px 32px;
+    background: #fafafa;
+    border: 1px solid var(--vv-border);
+    font-family: "Courier New", Consolas, monospace;
+  }
+  .vehicle-report h3 {
+    font-size: 16px;
+    color: var(--vv-text);
+    margin-bottom: 16px;
+    border-bottom: 2px solid var(--vv-text);
+    padding-bottom: 8px;
+    letter-spacing: 0.3px;
+  }
+  .vehicle-report p {
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 14px;
+    color: #333;
+  }
+  .vehicle-report .para-num { font-weight: 700; color: var(--vv-text); }
+  .vehicle-report .verdict {
+    margin-top: 18px;
+    padding: 14px 16px;
+    background: #fff;
+    border-left: 4px solid var(--vv-danger);
+    font-weight: 700;
+  }
+
+  /* ===== UI breakdown — the bureaucrat is losing it ===== */
+  body.breakdown {
+    background: #fbe9ec;
+  }
+  body.breakdown header.vv-header {
+    background: #c8102e;
+    transform: skewY(-0.8deg);
+  }
+  body.breakdown .vv-logo .text {
+    font-family: "Comic Sans MS", "Marker Felt", cursive;
+    letter-spacing: -0.5px;
+  }
+  body.breakdown .card {
+    transform: rotate(-0.4deg);
+    border: 2px dashed #c8102e;
+  }
+  body.breakdown .card h2 {
+    color: #c8102e !important;
+    font-style: italic;
+    text-decoration: underline wavy #c8102e;
+  }
+  body.breakdown .absurd {
+    background: #ffe5e5;
+    border-left-color: #c8102e;
+    font-family: "Comic Sans MS", "Marker Felt", cursive;
+    font-size: 22px !important;
+    transform: rotate(0.6deg);
+  }
+  body.breakdown .control-bar { background: #c8102e; }
+  body.breakdown .case-banner { background: #c8102e; transform: skewX(-1deg); }
+
   /* ===== Failure / Success ===== */
   .failure-card h2 { color: var(--vv-danger); }
   .absurd {
@@ -557,7 +689,7 @@
   <div id="introPanel" class="card">
     <h2>Obligatorisk blinklysprøve</h2>
     <p class="lead">Alle førere av motorvogn er pålagt å gjennomføre en sertifisert blinklysprøve i henhold til forskrift om førerkompetanse §3-1.</p>
-    <p>Prøven består av syv (7) standardiserte kjøresituasjoner. Kandidaten skal demonstrere korrekt bruk av retningsangivere i henhold til vegtrafikkloven §11. Manglende beståelse kan medføre revurdering av førerkortets gyldighet.</p>
+    <p>Prøven består av ti (10) standardiserte kjøresituasjoner. Kandidaten skal demonstrere korrekt bruk av retningsangivere i henhold til vegtrafikkloven §11. Manglende beståelse kan medføre revurdering av førerkortets gyldighet.</p>
 
     <h3>Antall forsøk</h3>
     <p>Kandidaten har <b>tre (3) forsøk</b> totalt i løpet av prøven. Ved tredje feil avbrytes prøven og kandidaten overføres til videre saksbehandling.</p>
@@ -614,6 +746,12 @@
     <div class="game-instructions">
       <b>Blinklys:</b> piltast <b>←</b> / <b>→</b> eller knappene · <b>Sving:</b> trykk på rattet (eller piltast <b>↓</b>)
     </div>
+    <div id="tallyDisplay" class="tally-display">
+      <span>Drepte fotgjengere: <b>0</b></span>
+      <span>Skadede syklister: <b>0</b></span>
+      <span>Ødelagte barnevogner: <b>0</b></span>
+      <span>Påkjørsler bakfra: <b>0</b></span>
+    </div>
     <div id="gameWrap">
       <canvas id="gameCanvas"></canvas>
     </div>
@@ -634,6 +772,37 @@
         <span class="arrow">→</span>
         <span>BLINKLYS</span>
       </button>
+    </div>
+  </div>
+
+  <!-- POLICE REPORT REVEAL (dark case / blind spot) -->
+  <div id="revealPanel" class="card police-report hidden">
+    <div class="report-header">HENDELSESREKONSTRUKSJON</div>
+    <div class="report-meta">
+      Saksnummer: <span id="revealCaseNumber">—</span><br>
+      Dato: <span id="revealDate">—</span><br>
+      Saksbehandler: pol.bet. R. Thoresen, Trafikkseksjonen
+    </div>
+    <div class="report-section">
+      <h3>1. Hendelsesbeskrivelse</h3>
+      <p>Kjøretøy registrert i manøver uten tilstrekkelig tegn eller varsling. Etterfølgende etterforskning avdekket følgende objekt i manøverområdet:</p>
+      <p id="revealText" class="reveal-quote">—</p>
+    </div>
+    <div class="report-section">
+      <h3>2. Identifikasjon av fører</h3>
+      <p>Navn: <b id="revealName">—</b><br>Kjøretøy: <b id="revealCar">—</b></p>
+    </div>
+    <div class="report-section">
+      <h3>3. Saksbehandlers kommentar</h3>
+      <p id="revealAbsurd" class="reveal-rant">—</p>
+    </div>
+    <div class="report-section">
+      <h3>4. Lovanvendelse</h3>
+      <p id="revealRule" class="reveal-rule">—</p>
+    </div>
+    <div style="margin-top:22px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn primary" id="revealRetryBtn">Prøv igjen</button>
+      <button class="btn secondary" id="revealNextBtn">Neste oppgave</button>
     </div>
   </div>
 
@@ -701,6 +870,12 @@
       <button class="btn primary" id="downloadBtn">Last ned bevis som bilde</button>
       <button class="btn secondary" id="restartBtn">Ta prøven på nytt</button>
     </div>
+
+    <!-- VEHICLE ANALYSIS REPORT -->
+    <div class="vehicle-report" id="vehicleReport">
+      <h3>§ Kjøreanalyse – automatisk generert av Statens blinklysdirektorat</h3>
+      <div id="vehicleReportBody"></div>
+    </div>
   </div>
 
 </div>
@@ -719,10 +894,105 @@ const state = {
   killed: 0,
   errors: 0,
   isPremium: false,
-  strikes: 0,        // current strikes used
-  maxStrikes: 3,     // 3 for normal, 1 for premium
+  strikes: 0,
+  maxStrikes: 3,
   jailed: false,
+  // Per-type tally for the certificate / report
+  killedPedestrians: 0,
+  injuredCyclists: 0,
+  destroyedStrollers: 0,
+  rearEnded: 0,
+  // Cumulative across all retries — drives tone escalation and UI breakdown
+  totalFailures: 0,
+  // Pattern detection for vehicle analysis report
+  patternTooEarly: 0,
+  patternTooLate: 0,
+  patternNoBlink: 0,
+  patternWrongSide: 0,
 };
+
+// ============ TONE / NARRATOR ESCALATION ============
+function toneTier() {
+  const f = state.totalFailures;
+  if (f <= 1) return 0; // dry
+  if (f === 2) return 1; // annoyed
+  if (f === 3) return 2; // angry
+  return 3;               // unhinged
+}
+
+function escalatedAbsurd(c) {
+  const baseLine = c.absurd[Math.floor(Math.random() * c.absurd.length)];
+  const name = state.playerName;
+  const tier = toneTier();
+  if (tier === 0) {
+    return 'Vi beklager. ' + baseLine;
+  }
+  if (tier === 1) {
+    return 'Hva faen holder du på med, ' + name + '. ' + baseLine;
+  }
+  if (tier === 2) {
+    return 'ER DU HELT IDIOT?? ' + baseLine.toUpperCase() + ' DET ER ET BARN I DEN BARNEVOGNA, ' + name.toUpperCase() + '.';
+  }
+  // tier 3 — unhinged
+  return 'JEG ORKER IKKE MER, ' + name.toUpperCase() + '. ' +
+    baseLine.toUpperCase() + ' ' +
+    'DU ER ET LEVENDE ARGUMENT FOR Å FJERNE FØRERKORTORDNINGEN. JEG MELDER DEG PERSONLIG TIL POLITIET ETTER JOBB. JEG HÅPER DU FORSTÅR HVA DU HAR GJORT.';
+}
+
+// ============ SOUND EFFECTS (Web Audio API) ============
+let _audioCtx = null;
+function audio() {
+  if (!_audioCtx) {
+    try { _audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+    catch (e) { _audioCtx = null; }
+  }
+  return _audioCtx;
+}
+function playTone(freq, duration, type, gain) {
+  const ctx = audio(); if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const g = ctx.createGain();
+  osc.type = type || 'sine';
+  osc.frequency.value = freq;
+  g.gain.value = gain || 0.06;
+  osc.connect(g); g.connect(ctx.destination);
+  const now = ctx.currentTime;
+  g.gain.setValueAtTime(g.gain.value, now);
+  g.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+  osc.start(now);
+  osc.stop(now + duration);
+}
+function sfxBlink() { playTone(880, 0.06, 'square', 0.04); }
+function sfxCrash() {
+  const ctx = audio(); if (!ctx) return;
+  // Noise burst
+  const buf = ctx.createBuffer(1, ctx.sampleRate * 0.6, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = (Math.random()*2-1) * (1 - i/data.length);
+  const src = ctx.createBufferSource();
+  const g = ctx.createGain();
+  src.buffer = buf;
+  g.gain.value = 0.25;
+  src.connect(g); g.connect(ctx.destination);
+  src.start();
+}
+function sfxJail() {
+  playTone(120, 0.4, 'sawtooth', 0.15);
+  setTimeout(() => playTone(80, 0.6, 'sawtooth', 0.12), 150);
+}
+function sfxFanfare() {
+  playTone(523, 0.15, 'triangle', 0.08);
+  setTimeout(() => playTone(659, 0.15, 'triangle', 0.08), 150);
+  setTimeout(() => playTone(784, 0.25, 'triangle', 0.08), 300);
+}
+
+function applyBreakdownClass() {
+  if (state.totalFailures >= 4) {
+    document.body.classList.add('breakdown');
+  } else {
+    document.body.classList.remove('breakdown');
+  }
+}
 
 // ============ CASES ============
 const CASES = [
@@ -738,7 +1008,18 @@ const CASES = [
     pathType: 'laneChangeRight'
   },
   {
-    title: 'Sak 2: Avkjøring fra motorvei',
+    title: 'Sak 2: Feltskifte til venstre (motorvei)',
+    expected: 'left',
+    rule: 'Vegtrafikkloven §11: Tegn skal gis i god tid før manøveren, slik at andre trafikanter kan innrette seg etter det.',
+    crashType: 'rear',
+    absurd: [
+      'Det er ikke noe vits å blinke MENS du svinger. Da ser vi det allerede.',
+      'En lastebil kjørte rett gjennom deg. Lastebilen er uskadd.'
+    ],
+    pathType: 'laneChangeLeft'
+  },
+  {
+    title: 'Sak 3: Avkjøring fra motorvei',
     expected: 'right',
     rule: 'Forskrift om kjøretøytegn §5: Ved avkjøring fra motorvei skal høyre retningsviser være aktivert i god tid før avkjøringsfeltet.',
     crashType: 'pedestrian',
@@ -749,7 +1030,7 @@ const CASES = [
     pathType: 'exit'
   },
   {
-    title: 'Sak 3: Parkering langs fortau',
+    title: 'Sak 4: Parkering langs fortau',
     expected: 'right',
     rule: 'Trafikkreglene §14: Ved parkering langs vegkant skal fører gi tegn til høyre i god tid før kjøretøyet stanser.',
     crashType: 'cyclist',
@@ -760,7 +1041,7 @@ const CASES = [
     pathType: 'park'
   },
   {
-    title: 'Sak 4: Høyresving i kryss',
+    title: 'Sak 5: Høyresving i kryss',
     expected: 'right',
     rule: 'Trafikkreglene §13: Fører som skal svinge i kryss, skal gi tegn i god tid før manøveren og avvente til fotgjengerfeltet er fritt. Det er ikke tilstrekkelig at den første fotgjengeren har passert.',
     crashType: 'pedestrian',
@@ -773,7 +1054,7 @@ const CASES = [
     pathType: 'turnRight'
   },
   {
-    title: 'Sak 5: Venstresving i kryss',
+    title: 'Sak 6: Venstresving i kryss',
     expected: 'left',
     rule: 'Trafikkreglene §13: Ved venstresving skal venstre retningsviser være aktivert i god tid, og fører skal forsikre seg om at fotgjengerfeltet er klart før manøveren utføres.',
     crashType: 'pedestrian',
@@ -786,7 +1067,7 @@ const CASES = [
     pathType: 'turnLeft'
   },
   {
-    title: 'Sak 6: Rundkjøring – første avkjørsel',
+    title: 'Sak 7: Rundkjøring – første avkjørsel',
     expected: 'right',
     rule: 'Trafikkreglene §14a: Ved utkjøring fra rundkjøring skal høyre retningsviser være aktivert. Ved første avkjørsel skal tegnet gis så snart kjøretøyet har passert innkjøringen.',
     crashType: 'stroller',
@@ -797,7 +1078,7 @@ const CASES = [
     pathType: 'roundabout1'
   },
   {
-    title: 'Sak 7: Rundkjøring – andre avkjørsel',
+    title: 'Sak 8: Rundkjøring – andre avkjørsel',
     expected: 'right',
     rule: 'Trafikkreglene §14a: I rundkjøringer med flere avkjørsler skal høyre retningsviser aktiveres FØR ønsket avkjørsel, og ikke før. Tegn ved første avkjørsel når man skal videre, regnes som villedende tegn.',
     crashType: 'cyclist',
@@ -806,6 +1087,34 @@ const CASES = [
       'En blinker som lyver er verre enn en blinker som tier. Det vet man.'
     ],
     pathType: 'roundabout2'
+  },
+  {
+    title: 'Sak 9: Sving til høyre i tettbebygd strøk',
+    expected: 'right',
+    rule: 'Trafikkreglene §13 og §3: Fører skal opptre hensynsfullt og være aktsom og varsom så det ikke kan oppstå fare eller voldes skade, og slik at annen trafikk ikke unødig blir hindret eller forstyrret.',
+    crashType: 'pedestrian',
+    obstacleClearMs: 0,
+    absurd: [
+      'Det så tomt ut. Det var ikke tomt.',
+      'Du så ingenting. Det var det som var problemet.'
+    ],
+    pathType: 'turnRight',
+    darkCase: true,
+    revealText: 'På dette tidspunktet befant det seg ett (1) barn på fortauet ved fotgjengerfeltet. Barnet hadde rød jakke. Barnet er nå registrert som hendelsesavhengig.'
+  },
+  {
+    title: 'Sak 10: Feltskifte i tettbebygd strøk',
+    expected: 'right',
+    rule: 'Trafikkreglene §12: Før kjøretøyet flyttes sideveis, skal fører forvisse seg om at det kan skje uten fare eller unødig hinder for andre. Sjekking av blindsone er obligatorisk.',
+    crashType: 'cyclist',
+    obstacleClearMs: 0,
+    absurd: [
+      'Du sjekket ikke blindsonen. Det var en grunn til at den kalles det.',
+      'Bilen din traff noe mykt. Det var ikke en pute.'
+    ],
+    pathType: 'laneChangeRight',
+    blindSpot: true,
+    revealText: 'En syklist befant seg i kjøretøyets blindsone på tidspunktet for manøveren. Sykkel: Trek FX 3 Disc. Hjelm: ja. Refleksvest: ja. Blinklys fra kjøretøy: nei.'
   },
 ];
 
@@ -1040,6 +1349,7 @@ function pressBlink(side) {
   game.blinker = side;
   game.blinkerOnT = game.t;
   refreshBlinkButtons();
+  sfxBlink();
 }
 
 // pressWheel: actually steers the car. This is the commit action.
@@ -1169,6 +1479,7 @@ function triggerCrash() {
   game.willJail = willBeStrikes >= state.maxStrikes;
   game.crashPhase = 'crash';
   game.crashTimer = 0;
+  sfxCrash();
 }
 
 function advanceCrashPhase() {
@@ -1186,6 +1497,7 @@ function advanceCrashPhase() {
   } else if (game.crashPhase === 'fade' && game.crashTimer > 700) {
     game.crashPhase = 'jail';
     game.crashTimer = 0;
+    sfxJail();
   } else if (game.crashPhase === 'jail' && game.crashTimer > 2400) {
     game.crashPhase = 'done';
     showFailure();
@@ -1327,6 +1639,8 @@ function drawScene() {
 function drawObstacle() {
   const w = W(), h = H();
   const c = game.caseDef;
+  // Dark case / blind-spot case: nothing visible during gameplay
+  if (c.darkCase || c.blindSpot) return;
   // Hide once player has clearly committed past obstacle
   if (game.phase === 'done') return;
   if (game.phase === 'maneuver' && game.maneuverProgress > 0.6) return;
@@ -1631,15 +1945,23 @@ function showFailure() {
   game.done = true;
   state.failedCases++;
   state.strikes++;
+  state.totalFailures++;
   const c = game.caseDef;
-  if (c.crashType === 'pedestrian') state.killed++;
-  if (c.crashType === 'cyclist') state.killed++;
-  if (c.crashType === 'stroller') state.killed += 2;
+  if (c.crashType === 'pedestrian') { state.killed++; state.killedPedestrians++; }
+  if (c.crashType === 'cyclist')    { state.killed++; state.injuredCyclists++; }
+  if (c.crashType === 'stroller')   { state.killed += 2; state.destroyedStrollers++; }
+  if (c.crashType === 'rear')       { state.rearEnded++; }
+  if (game && game.crashReason === 'too_early') state.patternTooEarly++;
+  if (game && game.crashReason === 'collision') state.patternTooLate++;
+  if (game && game.crashReason === 'no_blink')  state.patternNoBlink++;
+  if (game && game.crashReason === 'wrong_side') state.patternWrongSide++;
   state.errors += state.isPremium ? 2 : 1;
 
+  applyBreakdownClass();
   updateStrikeDots();
+  updateTallyDisplay();
 
-  // If they ran out of strikes, jump to certificate
+  // Out of strikes — go to denial
   if (state.strikes >= state.maxStrikes) {
     state.jailed = true;
     document.getElementById('gamePanel').classList.add('hidden');
@@ -1648,15 +1970,41 @@ function showFailure() {
   }
 
   document.getElementById('gamePanel').classList.add('hidden');
+
+  // Dark / blind-spot cases get a police-report reveal screen instead
+  if (c.darkCase || c.blindSpot) {
+    const rp = document.getElementById('revealPanel');
+    rp.classList.remove('hidden');
+    document.getElementById('revealText').textContent = c.revealText;
+    document.getElementById('revealName').textContent = state.playerName;
+    document.getElementById('revealCar').textContent = state.car || '—';
+    document.getElementById('revealCaseNumber').textContent =
+      'BD-' + (10000 + state.totalFailures*131).toString().slice(0,6);
+    document.getElementById('revealDate').textContent = new Date().toLocaleDateString('nb-NO');
+    document.getElementById('revealRule').innerHTML = '<b>Offisiell regel:</b> ' + c.rule;
+    document.getElementById('revealAbsurd').textContent = escalatedAbsurd(c);
+    return;
+  }
+
   const fp = document.getElementById('failurePanel');
   fp.classList.remove('hidden');
-  document.getElementById('absurdMsg').textContent = c.absurd[Math.floor(Math.random()*c.absurd.length)];
+  document.getElementById('absurdMsg').textContent = escalatedAbsurd(c);
   document.getElementById('officialRule').innerHTML = '<b>Offisiell regel:</b> ' + c.rule;
   const remaining = state.maxStrikes - state.strikes;
   document.getElementById('strikeStatus').textContent =
     `Du har ${remaining} forsøk igjen før prøven avbrytes.`;
   const note = document.getElementById('premiumNoteWrap');
   note.innerHTML = state.isPremium ? '<div class="premium-note">Premiumtillegg anvendt (×2 trekk).</div>' : '';
+}
+
+function updateTallyDisplay() {
+  const t = document.getElementById('tallyDisplay');
+  if (!t) return;
+  t.innerHTML =
+    `<span>Drepte fotgjengere: <b>${state.killedPedestrians}</b></span>` +
+    `<span>Skadede syklister: <b>${state.injuredCyclists}</b></span>` +
+    `<span>Ødelagte barnevogner: <b>${state.destroyedStrollers}</b></span>` +
+    `<span>Påkjørsler bakfra: <b>${state.rearEnded}</b></span>`;
 }
 
 function showSuccess() {
@@ -1669,6 +2017,14 @@ document.getElementById('retryBtn').addEventListener('click', () => {
   document.getElementById('failurePanel').classList.add('hidden');
   startCase(state.caseIndex);
 });
+document.getElementById('revealRetryBtn').addEventListener('click', () => {
+  document.getElementById('revealPanel').classList.add('hidden');
+  startCase(state.caseIndex);
+});
+document.getElementById('revealNextBtn').addEventListener('click', () => {
+  document.getElementById('revealPanel').classList.add('hidden');
+  advanceCase();
+});
 
 document.getElementById('nextBtn').addEventListener('click', advanceCase);
 document.getElementById('continueBtn').addEventListener('click', advanceCase);
@@ -1680,6 +2036,77 @@ function advanceCase() {
     showCertificate();
   } else {
     startCase(state.caseIndex + 1);
+  }
+}
+
+// ============ VEHICLE ANALYSIS REPORT ============
+function generateVehicleReport() {
+  const name = state.playerName;
+  const total = state.totalFailures;
+  const ped = state.killedPedestrians;
+  const cyc = state.injuredCyclists;
+  const stroll = state.destroyedStrollers;
+  const rear = state.rearEnded;
+
+  let paragraphs = [];
+
+  // Determine "vehicle personality" from pattern
+  let vehicleGuess;
+  if (total === 0) {
+    vehicleGuess = 'Toyota Corolla 1.6, mest sannsynlig hvit eller sølvgrå, årsmodell 2013';
+    paragraphs = [
+      `Sjåfør <b>${name}</b> har gjennomført prøven uten registrerte avvik. Dette er statistisk sett svært uvanlig og systemet er usikkert på om dette er en feil i datagrunnlaget eller et faktisk tilfelle av kompetanse.`,
+      `Kjøremønsteret er konsistent med eierskap av en <b>${vehicleGuess}</b>. Vedkommende har sannsynligvis en tykk velkomstmatte, bruker fartsholder under 75 km/t og holder seg til høyre felt uten unntak.`,
+      `Det antas at ${name} har en handleliste i bagasjerommet og alltid vet hvor de har parkeringskvitteringen. Dette er beundringsverdig, men kjedelig.`,
+      `<span class="para-num">Konklusjon:</span> Ingen tiltak anbefales. Vedkommende bør imidlertid oppfordres til å slappe av av og til.`
+    ];
+  } else if (state.car === 'BMW' || (state.patternNoBlink >= 2 && state.patternTooLate >= 1)) {
+    vehicleGuess = 'BMW 320d, sølvgrå metallic, årsmodell 2017–2019';
+    paragraphs = [
+      `Basert på <b>${total}</b> registrerte hendelser og <b>${ped}</b> drepte fotgjengere har systemet konkludert med følgende om sjåfør <b>${name}</b>:`,
+      `Sjåføren viser et kjøremønster konsistent med eierskap av en <b>${vehicleGuess}</b>. Vedkommende har antagelig "senior", "lead" eller "head of" i stillingstittelen sin, og mener fartsgrenser er veiledende anbefalinger for andre.`,
+      `Det er registrert <b>${state.patternNoBlink}</b> tilfeller av manglende blinklysbruk, noe som er imponerende selv etter norsk standard. Vedkommende skifter fil som om de har forkjørsrett på en flyplassrullebane.`,
+      `<span class="para-num">§ Konklusjon:</span> Tilbakekall av førerrett anbefales. Vennligst lever inn lappen på nærmeste lensmannskontor. ${name}, vi vet hvor du bor.`
+    ];
+  } else if (state.car === 'Tesla' || state.patternNoBlink >= 3) {
+    vehicleGuess = 'Tesla Model 3 Long Range, hvit, med ripete nummerskilt';
+    paragraphs = [
+      `Sjåfør <b>${name}</b> har under prøven vist et kjøremønster konsistent med eierskap av en <b>${vehicleGuess}</b>.`,
+      `Vedkommende tror at autopiloten tar seg av blinklys. Den gjør ikke det. Vedkommende tror også at autopiloten ser fotgjengere. Den gjør ikke alltid det heller.`,
+      `Det er registrert <b>${state.patternNoBlink}</b> manøvere uten blinklys, og <b>${ped + cyc}</b> menneskelige skjebner som kunne vært unngått med en enkel fingerbevegelse. Dette er en ny norsk rekord.`,
+      `<span class="para-num">§ Konklusjon:</span> Kjøretøyet beholdes, men Elon Musk er personlig varslet. ${name} oppfordres til å selge bilen og kjøpe et elsykkel. Med hjelm.`
+    ];
+  } else if (state.patternWrongSide >= 2) {
+    vehicleGuess = 'Volkswagen Caddy varebil, hvit, med firmalogo på siden';
+    paragraphs = [
+      `Sjåfør <b>${name}</b> blinket konsekvent i feil retning (<b>${state.patternWrongSide}</b> tilfeller). Dette tyder på en grunnleggende forvirring om hva som er høyre og hva som er venstre.`,
+      `Kjøremønsteret er konsistent med eierskap av en <b>${vehicleGuess}</b>. Vedkommende har sannsynligvis yrkesfagutdanning, bruker Red Bull som frokost, og kaller alle andre trafikanter for "idioter" mens de selv blinker i feil retning.`,
+      `Bagasjerommet inneholder etter all sannsynlighet en halvtom pose med chips, to skrutrekkere, og en kaffekopp fra Circle K fra tirsdag forrige uke.`,
+      `<span class="para-num">§ Konklusjon:</span> ${name} bør vurdere å ta et kurs i grunnleggende romforståelse. Eller bytte yrke.`
+    ];
+  } else if (state.car === 'Harry-bil' || (rear >= 1 && cyc >= 1)) {
+    vehicleGuess = 'Volvo V70, mørkeblå, årsmodell 2004, med ripe i venstre bakdør';
+    paragraphs = [
+      `Sjåfør <b>${name}</b> har et kjøremønster konsistent med eierskap av en <b>${vehicleGuess}</b>. Bilen lukter av våt hund og gamle kvitteringer fra Rema 1000.`,
+      `Det henger en vernet trebeskytter på speilet og bagasjerommet inneholder en sammenrullet skigard og et par turstøvler som ikke har vært ute av bilen siden 2017.`,
+      `Med <b>${total}</b> feil, <b>${ped}</b> drepte fotgjengere og <b>${cyc}</b> skadde syklister, har sjåføren bekreftet den klassiske Volvo-paradokset: utrolig trygg bil, forferdelig fører.`,
+      `<span class="para-num">§ Konklusjon:</span> ${name} bør fortsette å kjøre Volvo. Bilen vil fortsette å overleve uansett hva ${name} gjør med den.`
+    ];
+  } else {
+    vehicleGuess = 'Ford Focus, mørkegrønn, årsmodell 2011, med aux-kabel i hanskerommet';
+    paragraphs = [
+      `Sjåfør <b>${name}</b> har produsert <b>${total}</b> feil, <b>${ped}</b> drepte fotgjengere, <b>${cyc}</b> skadde syklister og <b>${stroll}</b> ødelagte barnevogner.`,
+      `Dette kjøremønsteret er konsistent med eierskap av en <b>${vehicleGuess}</b>. Vedkommende har spillelister med navn som "Tur ☀️" og bruker begrepet "koselig" ukritisk.`,
+      `Rattet er bare holdt med én hånd. Den andre holder en kaffekopp som aldri blir drukket opp.`,
+      `<span class="para-num">§ Konklusjon:</span> ${name} bør ta bussen oftere. Samfunnet vil takke deg.`
+    ];
+  }
+
+  const body = document.getElementById('vehicleReportBody');
+  if (body) {
+    body.innerHTML = paragraphs.map((p, i) =>
+      `<p><span class="para-num">§${i+1}.</span> ${p}</p>`
+    ).join('');
   }
 }
 
@@ -1714,9 +2141,11 @@ function showCertificate() {
   else grade = 'F';
   document.getElementById('gradeBox').textContent = grade;
   if (['A','B','C'].includes(grade)) launchConfetti();
+  generateVehicleReport();
 }
 
 function launchConfetti() {
+  sfxFanfare();
   const colors = ['#0062ba','#ffd520','#c8102e','#047857','#1a1a1a'];
   for (let i=0;i<80;i++) {
     const el = document.createElement('div');
@@ -1755,9 +2184,21 @@ function fullRestart() {
   state.errors = 0;
   state.strikes = 0;
   state.jailed = false;
+  state.killedPedestrians = 0;
+  state.injuredCyclists = 0;
+  state.destroyedStrollers = 0;
+  state.rearEnded = 0;
+  state.totalFailures = 0;
+  state.patternTooEarly = 0;
+  state.patternTooLate = 0;
+  state.patternNoBlink = 0;
+  state.patternWrongSide = 0;
+  document.body.classList.remove('breakdown');
   updateStrikeDots();
+  updateTallyDisplay();
   document.getElementById('endPanel').classList.add('hidden');
   document.getElementById('denialPanel').classList.add('hidden');
+  document.getElementById('revealPanel').classList.add('hidden');
   document.getElementById('introPanel').classList.remove('hidden');
 }
 document.getElementById('restartBtn').addEventListener('click', fullRestart);
