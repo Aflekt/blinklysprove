@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    @apply font-vv text-vv-text bg-white antialiased;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  body { margin: 0; }
+  * { -webkit-tap-highlight-color: transparent; }
+}
+
+@layer components {
+  .vv-card {
+    @apply bg-white mb-9;
+  }
+  .vv-card h2 {
+    @apply text-3xl font-normal text-vv-text mb-4 leading-tight;
+  }
+  .vv-card h3 {
+    @apply text-xl font-bold text-vv-text mt-7 mb-2;
+  }
+  .vv-card p {
+    @apply mb-4 text-base leading-relaxed text-vv-text;
+  }
+
+  .vv-lead {
+    @apply text-lg text-vv-text mb-5 leading-relaxed;
+  }
+
+  .vv-btn {
+    @apply inline-block bg-vv-text text-white border-2 border-vv-text px-8 py-3.5 font-bold cursor-pointer rounded-sm mr-1 mt-1.5 transition-colors;
+    font-family: inherit;
+  }
+  .vv-btn:hover { @apply bg-[#2f3a40] border-[#2f3a40]; }
+  .vv-btn:disabled { @apply bg-gray-400 border-gray-400 cursor-not-allowed; }
+  .vv-btn-secondary {
+    @apply bg-white text-vv-text border-2 border-vv-text;
+  }
+  .vv-btn-secondary:hover { @apply bg-vv-light text-vv-text; }
+
+  .vv-input {
+    @apply border border-gray-400 px-4 py-3.5 text-base text-vv-text w-full max-w-md rounded-sm bg-white;
+    font-family: inherit;
+  }
+  .vv-input:focus { @apply outline outline-2 outline-vv-text border-vv-text; }
+
+  .vv-form-label {
+    @apply block font-bold text-sm text-vv-text mt-5 mb-2;
+  }
+
+  .info-box {
+    @apply bg-vv-light border-l-4 border-vv-text px-5 py-4 my-5 text-sm leading-relaxed;
+  }
+  .info-box-danger {
+    @apply bg-vv-danger-soft border-l-vv-danger;
+  }
+
+  .absurd-block {
+    @apply text-xl my-4 text-vv-text leading-relaxed py-5 px-6 bg-vv-cream border-l-4 border-vv-text;
+  }
+}
+
+.hidden-vv { display: none !important; }
+
+/* Confetti */
+.confetti-piece {
+  position: fixed;
+  width: 10px;
+  height: 14px;
+  top: -20px;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* UI breakdown — bureaucrat losing it */
+body.breakdown {
+  background: #fbe9ec;
+}
+body.breakdown header.vv-header {
+  background: #c8102e !important;
+  transform: skewY(-0.8deg);
+}
+body.breakdown .vv-card {
+  transform: rotate(-0.4deg);
+  border: 2px dashed #c8102e;
+}
+body.breakdown .vv-card h2 {
+  color: #c8102e !important;
+  font-style: italic;
+  text-decoration: underline wavy #c8102e;
+}
+body.breakdown .absurd-block {
+  background: #ffe5e5;
+  border-left-color: #c8102e;
+  font-family: "Comic Sans MS", "Marker Felt", cursive;
+  font-size: 22px !important;
+  transform: rotate(0.6deg);
+}
