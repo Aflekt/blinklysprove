@@ -1,16 +1,29 @@
-# React + Vite
+# Blinklysprøven
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Statens Blinklysdirektorat** har innført obligatorisk blinklysprøve for alle bilister. Du får ti kjøresituasjoner: feltskifte, avkjøring, parkering, rundkjøring og et par du ikke ser komme. Blink riktig vei, vent tre sekunder og sving. Gjør du noe annet, går det dårlig.
 
-Currently, two official plugins are available:
+**[Ta prøven →](https://blinklysprove.vercel.app)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+<img src="docs/demo.gif" alt="Bilen blinker til høyre, svinger til venstre, krasjer og sjåføren havner i fengsel." width="360">
 
-## React Compiler
+## Slik spiller du
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| | |
+|---|---|
+| Blinklys | `←` / `→` eller knappene |
+| Sving | trykk på rattet, eller `↓` |
 
-## Expanding the ESLint configuration
+Blinklyset må ha stått på i minst tre sekunder før du svinger, og veien må være klar. Direktoratet fører statistikk over alle avvik.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Kjør lokalt
+
+```sh
+npm install
+npm run dev
+```
+
+React, TypeScript, Vite og Tailwind. Alt i selve kjøringen tegnes på et `<canvas>`.
+
+---
+
+<sub>Dette er satire. Statens Blinklysdirektorat finnes ikke, og spillet har ingen tilknytning til Statens vegvesen.</sub>
