@@ -34,26 +34,29 @@ export function TouchControls() {
       <button
         onClick={() => setForced((v) => !v)}
         className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/55 text-white text-xs px-2 py-1 rounded font-mono"
-        style={{ transform: 'translate(-50%, 0)', bottom: show ? 90 : 12 }}
+        style={{ transform: 'translate(-50%, 0)', bottom: show ? 132 : 12 }}
       >
         📱 {show ? 'skjul touch-knapper' : 'vis touch-knapper'}
       </button>
 
       {show && (
         <>
-          <div className="absolute bottom-3 left-3 flex gap-2 select-none">
-            <HoldButton k="ArrowLeft"  label="◀" />
-            <HoldButton k="ArrowRight" label="▶" />
+          {/* Tap row sits above the steering pair so they never overlap on narrow phones */}
+          <div className="absolute bottom-3 left-3 flex flex-col gap-2 select-none">
+            <div className="flex gap-1.5">
+              <TapButton k="q" label="Q" />
+              <TapButton k="w" label="W" />
+              <TapButton k="m" label="M" />
+              <TapButton k="l" label="L" />
+            </div>
+            <div className="flex gap-2">
+              <HoldButton k="ArrowLeft"  label="◀" />
+              <HoldButton k="ArrowRight" label="▶" />
+            </div>
           </div>
           <div className="absolute bottom-14 right-3 flex flex-col gap-2 select-none">
             <HoldButton k="ArrowUp"   label="▲" />
             <HoldButton k="ArrowDown" label="▼" />
-          </div>
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 select-none" style={{ bottom: 12 }}>
-            <TapButton k="q" label="Q" />
-            <TapButton k="w" label="W" />
-            <TapButton k="m" label="M" />
-            <TapButton k="l" label="L" />
           </div>
         </>
       )}
