@@ -1,28 +1,14 @@
-// Tiny vanilla store with React-friendly subscribe (works with useSyncExternalStore).
 import { useSyncExternalStore } from 'react';
-import type { AppState, CaseDef, CrashReason } from '../types';
+import type { AppState } from '../types';
 
 const initialState: AppState = {
   playerName: 'Sjåfør',
+  selectedCar: 'corolla',
   screen: 'intro',
-  caseIndex: 0,
-
-  killedPedestrians: 0,
-  injuredCyclists: 0,
-  destroyedStrollers: 0,
-  rearEnded: 0,
-
-  failedCases: 0,
-  totalFailures: 0,
-  errors: 0,
-
-  patternTooEarly: 0,
-  patternTooLate: 0,
-  patternNoBlink: 0,
-  patternWrongSide: 0,
-
-  lastFailureCase: null,
-  lastFailureMessage: '',
+  lives: 3,
+  fines: 0,
+  totalErrors: 0,
+  gameOverReason: '',
 };
 
 let state: AppState = { ...initialState };
@@ -33,7 +19,7 @@ function emit() { listeners.forEach((l) => l()); }
 export const store = {
   get(): AppState { return state; },
   set(patch: Partial<AppState>) { state = { ...state, ...patch }; emit(); },
-  reset() { state = { ...initialState }; emit(); },
+  reset() { state = { ...initialState, playerName: state.playerName }; emit(); },
   subscribe(fn: () => void) { listeners.add(fn); return () => listeners.delete(fn); },
 };
 
@@ -45,20 +31,27 @@ export function useStore<T = AppState>(selector: (s: AppState) => T = ((s) => s 
   );
 }
 
-export function recordFailure(caseDef: CaseDef, crashReason: CrashReason) {
+export function loseLife(reason: string) {
   const s = store.get();
-  const patch: Partial<AppState> = {
-    failedCases: s.failedCases + 1,
-    totalFailures: s.totalFailures + 1,
-    errors: s.errors + 1,
-  };
-  if (caseDef.crashType === 'pedestrian') patch.killedPedestrians = s.killedPedestrians + 1;
-  if (caseDef.crashType === 'cyclist')    patch.injuredCyclists  = s.injuredCyclists + 1;
-  if (caseDef.crashType === 'stroller')   patch.destroyedStrollers = s.destroyedStrollers + 1;
-  if (caseDef.crashType === 'rear')       patch.rearEnded         = s.rearEnded + 1;
-  if (crashReason === 'too_early') patch.patternTooEarly = s.patternTooEarly + 1;
-  if (crashReason === 'collision') patch.patternTooLate  = s.patternTooLate + 1;
-  if (crashReason === 'no_blink')  patch.patternNoBlink  = s.patternNoBlink + 1;
-  if (crashReason === 'wrong_side')patch.patternWrongSide = s.patternWrongSide + 1;
-  store.set(patch);
+  const newLives = Math.max(0, s.lives - 1);
+  store.set({
+    lives: newLives,
+    totalErrors: s.totalErrors + 1,
+    ...(newLives === 0 ? { screen: 'gameOver', gameOverReason: reason } : {}),
+  });
+}
+
+export function loseAllLives(reason: string) {
+  const s = store.get();
+  store.set({
+    lives: 0,
+    totalErrors: s.totalErrors + 1,
+    screen: 'gameOver',
+    gameOverReason: reason,
+  });
+}
+
+export function addFine(amount: number) {
+  const s = store.get();
+  store.set({ fines: s.fines + amount });
 }

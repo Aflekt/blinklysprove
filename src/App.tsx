@@ -1,76 +1,49 @@
-import { useEffect } from 'react';
-import { useStore, store, recordFailure } from './state/store';
-import { CASES } from './cases';
+import { useStore, store } from './state/store';
+import { CAR_BY_ID } from './game/cars';
+import type { CarId } from './types';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { IntroScreen } from './components/IntroScreen';
+import { CarSelectScreen } from './components/CarSelectScreen';
 import { GameScreen } from './components/GameScreen';
-import { FailureScreen } from './components/FailureScreen';
-import { RevealScreen } from './components/RevealScreen';
-import { CertificateScreen } from './components/CertificateScreen';
-import type { CompletePayload } from './types';
-import { escalatedAbsurd } from './utils/tone';
+import { GameOverScreen } from './components/GameOverScreen';
+import { WonScreen } from './components/WonScreen';
 
 export function App() {
   const screen = useStore((s) => s.screen);
-  const caseIndex = useStore((s) => s.caseIndex);
-  const totalFailures = useStore((s) => s.totalFailures);
-
-  // Toggle the breakdown class on body once the bureaucrat has lost composure (4+ failures)
-  useEffect(() => {
-    if (totalFailures >= 4) document.body.classList.add('breakdown');
-    else document.body.classList.remove('breakdown');
-  }, [totalFailures]);
 
   const handleStart = (name: string) => {
     if (name) store.set({ playerName: name });
-    store.set({ screen: 'game', caseIndex: 0 });
+    store.set({ screen: 'select' });
   };
 
-  const handleCaseComplete = (payload: CompletePayload) => {
-    const c = CASES[caseIndex];
-    if (payload.outcome === 'success') {
-      // Auto-advance straight to next case (no per-case success screen for now)
-      goToNext();
-      return;
-    }
-    // Failure: record the failure stats and route to either reveal or failure screen
-    recordFailure(c, payload.crashReason ?? null);
-    const message = escalatedAbsurd(c, store.get().playerName, store.get().totalFailures);
+  const handlePickCar = (id: CarId) => {
+    const car = CAR_BY_ID[id];
     store.set({
-      lastFailureCase: c,
-      lastFailureMessage: message,
-      screen: c.darkCase || c.blindSpot ? 'reveal' : 'failure',
+      selectedCar: id,
+      screen: 'game',
+      lives: car.lives ?? 3,
+      fines: 0,
+      totalErrors: 0,
+      gameOverReason: '',
     });
   };
 
-  const handleRetry = () => {
-    store.set({ screen: 'game' });
-  };
-
-  const goToNext = () => {
-    if (caseIndex + 1 >= CASES.length) {
-      store.set({ screen: 'end' });
-    } else {
-      store.set({ caseIndex: caseIndex + 1, screen: 'game' });
-    }
-  };
-
   const handleRestart = () => {
+    const name = store.get().playerName;
     store.reset();
+    store.set({ screen: 'intro', playerName: name });
   };
 
   return (
     <>
       <Header />
-      <main className="max-w-3xl mx-auto px-8 py-12">
-        {screen === 'intro' && <IntroScreen onStart={handleStart} />}
-        {screen === 'game' && (
-          <GameScreen caseDef={CASES[caseIndex]} caseIndex={caseIndex} totalCases={CASES.length} onComplete={handleCaseComplete} />
-        )}
-        {screen === 'failure' && <FailureScreen onRetry={handleRetry} onNext={goToNext} />}
-        {screen === 'reveal' && <RevealScreen onRetry={handleRetry} onNext={goToNext} />}
-        {screen === 'end' && <CertificateScreen onRestart={handleRestart} />}
+      <main className="max-w-5xl mx-auto px-8 py-8">
+        {screen === 'intro'    && <IntroScreen onStart={handleStart} />}
+        {screen === 'select'   && <CarSelectScreen onPick={handlePickCar} />}
+        {screen === 'game'     && <GameScreen />}
+        {screen === 'gameOver' && <GameOverScreen onRestart={handleRestart} />}
+        {screen === 'won'      && <WonScreen onRestart={handleRestart} />}
       </main>
       <Footer />
     </>

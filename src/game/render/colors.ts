@@ -1,0 +1,23 @@
+// Shared palette for the game world.
+export const COLORS = {
+  grass: '#3a6b3a',
+  grassDark: '#1f3a1f',
+  road: '#2b2b2b',
+  roadLine: '#f0c63a',
+  roadEdge: '#d8d8d8',
+  zebra: '#ffffff',
+  shopWall: '#e8c84b',
+  shopRoof: '#7a5b15',
+  carBody: '#c8102e',
+  carRoof: '#7a0a1c',
+  carWindow: '#243038',
+  blinkerOn: '#ffd23a',
+  blinkerOff: '#5b3b00',
+  poleSteel: '#9a9a9a',
+  signRedBg: '#d31a1a',
+  signWhite: '#ffffff',
+  signYellow: '#ffe04a',
+  signBlue: '#1c4eb8',
+  lightOn: { red: '#ff2030', yellow: '#ffc400', green: '#22d04a' },
+  lightOff: '#1a1a1a',
+};
