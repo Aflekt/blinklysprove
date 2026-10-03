@@ -11,6 +11,7 @@ export const COLORS = {
   carBody: "#c8102e",
   carRoof: "#7a0a1c",
   carWindow: "#243038",
+  carOutline: "#222",
   blinkerOn: "#ffd23a",
   blinkerOff: "#5b3b00",
   poleSteel: "#9a9a9a",

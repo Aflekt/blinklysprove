@@ -18,8 +18,8 @@ pnpm dev | lint | typecheck | test | build
 ## Avvik fra standarden
 
 - Spillogikken ligger i `src/game/` (verden, regler, fysikk, canvas-tegning) og ikke i `src/lib/`. Den har `index.ts`-filer som samler eksporter per område (`game/cars`, `game/world`, `game/render`, `game/npcs`).
-- Fargene i selve kjøringen tegnes på canvas og ligger i `src/game/render/colors.ts` og i bildataene. De kan ikke bruke CSS-tokens, og står i unntakslista i `src/design-regler.test.ts`.
-- Skjemadelen bruker CSS-klasser (`vv-card`, `vv-btn`, `vv-input`) i `globals.css`, ikke komponenter i `base/`.
+- Fargene i selve kjøringen tegnes på canvas og ligger i `src/game/render/colors.ts` og i bildataene. De kan ikke bruke CSS-tokens, og står i unntakslista i `src/design-regler.test.ts`. HUD-en og popupen oppå spillet bruker tokens (`--hud-*`).
+- Utseendet på skjemadelen ligger fortsatt i CSS-klassene `vv-card`, `vv-btn` og `vv-input` i `globals.css`. Komponentene `Button`, `Input` og `Label` (`base/`) og `Card` og `Lead` (`ui/`) bruker dem.
 - Ingen miljøvariabler, derfor ingen `src/env.ts` eller `.env.example`.
 - Ingen mørk modus.
 

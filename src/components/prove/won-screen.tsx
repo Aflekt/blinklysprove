@@ -1,3 +1,5 @@
+import { Button } from "@/components/base/button";
+import { Card, Lead } from "@/components/ui/card";
 import { useStore } from "@/state/store";
 
 interface Props {
@@ -11,12 +13,12 @@ export function WonScreen({ onRestart }: Props) {
   const lives = useStore((s) => s.lives);
 
   return (
-    <div className="vv-card">
+    <Card>
       <h2>Du nådde matbutikken, {name}!</h2>
-      <p className="vv-lead">
+      <Lead>
         Statens blinklysdirektorat gratulerer. Du har bevist at du kan navigere norsk infrastruktur uten å (helt) drepe
         noen.
-      </p>
+      </Lead>
       <div className="info-box">
         <p>
           <b>Liv igjen:</b> {lives} av 3
@@ -28,9 +30,7 @@ export function WonScreen({ onRestart }: Props) {
           <b>Bøter:</b> {fines.toLocaleString("no-NO")} kr
         </p>
       </div>
-      <button type="button" className="vv-btn" onClick={onRestart}>
-        Ny runde
-      </button>
-    </div>
+      <Button onClick={onRestart}>Ny runde</Button>
+    </Card>
   );
 }
