@@ -1,21 +1,21 @@
 // World renderer — orchestrates the per-element drawers.
 
-import { COLORS } from './colors';
-import { drawRoads } from './roads';
-import { drawRoundabouts } from './roundabout';
-import { drawRema } from './rema';
-import { drawDecoys } from './decoys';
-import { drawParkingArea } from './parking';
-import { drawBensin } from './bensin';
-import { drawCar } from './car';
-import { drawSigns } from './signs';
-import { drawCrosswalks } from './crosswalks';
-import { drawTrafficLights } from './trafficLights';
-import { drawMapOverlay } from './mapOverlay';
-import { drawNpcs } from './npcs';
-import type { Player } from '../../types';
-import type { Npc } from '../npcs';
-import { WORLD } from '../world';
+import type { Player } from "../../types";
+import type { Npc } from "../npcs";
+import { WORLD } from "../world";
+import { drawBensin } from "./bensin";
+import { drawCar } from "./car";
+import { COLORS } from "./colors";
+import { drawCrosswalks } from "./crosswalks";
+import { drawDecoys } from "./decoys";
+import { drawMapOverlay } from "./mapOverlay";
+import { drawNpcs } from "./npcs";
+import { drawParkingArea } from "./parking";
+import { drawRema } from "./rema";
+import { drawRoads } from "./roads";
+import { drawRoundabouts } from "./roundabout";
+import { drawSigns } from "./signs";
+import { drawTrafficLights } from "./trafficLights";
 
 export interface RenderInput {
   player: Player;
@@ -26,12 +26,7 @@ export interface RenderInput {
   npcs?: Npc[];
 }
 
-export function drawWorld(
-  ctx: CanvasRenderingContext2D,
-  viewW: number,
-  viewH: number,
-  input: RenderInput,
-) {
+export function drawWorld(ctx: CanvasRenderingContext2D, viewW: number, viewH: number, input: RenderInput) {
   const { player, blinkerPhase, timeSec, showMap, carColors, npcs } = input;
   const camX = player.pos.x - viewW / 2;
   const camY = player.pos.y - viewH / 2;

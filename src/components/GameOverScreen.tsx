@@ -1,4 +1,4 @@
-import { useStore } from '../state/store';
+import { useStore } from "../state/store";
 
 interface Props {
   onRestart(): void;
@@ -12,12 +12,18 @@ export function GameOverScreen({ onRestart }: Props) {
   return (
     <div className="vv-card">
       <h2>Du er ferdig, {name}.</h2>
-      <p className="vv-lead">{reason || 'Du har mistet alle dine tre liv.'}</p>
+      <p className="vv-lead">{reason || "Du har mistet alle dine tre liv."}</p>
       <div className="info-box info-box-danger">
-        <p><b>Registrerte feil:</b> {errors}</p>
-        <p><b>Bøter:</b> {fines.toLocaleString('no-NO')} kr</p>
+        <p>
+          <b>Registrerte feil:</b> {errors}
+        </p>
+        <p>
+          <b>Bøter:</b> {fines.toLocaleString("no-NO")} kr
+        </p>
       </div>
-      <button className="vv-btn" onClick={onRestart}>Prøv igjen</button>
+      <button type="button" className="vv-btn" onClick={onRestart}>
+        Prøv igjen
+      </button>
     </div>
   );
 }

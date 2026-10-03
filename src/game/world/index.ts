@@ -1,18 +1,18 @@
 // World layout — re-exports from each submodule plus the player spawn.
 
-export * from './constants';
-export * from './roundabout';
-export * from './roads';
-export * from './rema';
-export * from './decoys';
-export * from './parking';
-export * from './bensin';
-export * from './oneWay';
-export * from './signs';
-export * from './crosswalks';
-export * from './trafficLights';
+export * from "./bensin";
+export * from "./constants";
+export * from "./crosswalks";
+export * from "./decoys";
+export * from "./oneWay";
+export * from "./parking";
+export * from "./rema";
+export * from "./roads";
+export * from "./roundabout";
+export * from "./signs";
+export * from "./trafficLights";
 
-import { PARKING_AREA } from './parking';
+import { PARKING_AREA } from "./parking";
 
 // Player spawns inside the parkeringsplass, stopped, facing north so they
 // can immediately try opening the map and signalling on exit.
