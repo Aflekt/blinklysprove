@@ -24,7 +24,7 @@ export function CarSelectScreen({ onPick }: Props) {
             onClick={() => onPick(c.id)}
             onMouseEnter={() => setHover(c.id)}
             onMouseLeave={() => setHover(null)}
-            className="text-left border-2 border-vv-border rounded p-4 bg-white hover:border-vv-text transition-colors"
+            className="text-left border-2 border-vv-border rounded-sm p-4 bg-white hover:border-vv-text transition-colors"
             style={{
               boxShadow: hover === c.id ? "0 0 0 3px #444f55" : "none",
             }}
@@ -42,7 +42,7 @@ export function CarSelectScreen({ onPick }: Props) {
 
 function CarPreview({ car }: { car: CarConfig }) {
   return (
-    <div className="h-20 flex items-center justify-center bg-vv-light rounded">
+    <div className="h-20 flex items-center justify-center bg-vv-light rounded-sm">
       <svg width="76" height="46" viewBox="-38 -22 76 44" aria-hidden="true">
         <rect x="-19" y="-11" width="38" height="22" fill={car.body} stroke="#222" strokeWidth="1" />
         <rect x="-11" y="-8" width="22" height="16" fill={car.roof} />
@@ -63,7 +63,7 @@ function Tags({ car }: { car: CarConfig }) {
   return (
     <div className="flex flex-wrap gap-1 mt-2">
       {tags.map((t) => (
-        <span key={t} className="text-xs px-2 py-0.5 bg-vv-cream border border-vv-border rounded">
+        <span key={t} className="text-xs px-2 py-0.5 bg-vv-cream border border-vv-border rounded-sm">
           {t}
         </span>
       ))}

@@ -45,7 +45,7 @@ const TOAST_BG: Record<ToastKind, string> = {
 function Toast({ kind, children }: { kind: ToastKind; children: React.ReactNode }) {
   return (
     <div
-      className="absolute top-16 left-1/2 -translate-x-1/2 text-white font-bold px-5 py-2 rounded shadow-lg text-sm max-w-[80%] text-center"
+      className="absolute top-16 left-1/2 -translate-x-1/2 text-white font-bold px-5 py-2 rounded-sm shadow-lg text-sm max-w-[80%] text-center"
       style={{ background: TOAST_BG[kind] }}
     >
       {children}
@@ -55,7 +55,7 @@ function Toast({ kind, children }: { kind: ToastKind; children: React.ReactNode 
 
 function PopupNotification() {
   return (
-    <div className="absolute top-4 left-1/2 -translate-x-1/2 popup-shake">
+    <div className="absolute top-4 left-1/2 popup-shake">
       <div
         className="rounded-lg shadow-xl px-5 py-3 text-white border-2 popup-pulse"
         style={{ background: "#c8102e", borderColor: "#7a0a1c", minWidth: 260, textAlign: "center" }}
@@ -105,19 +105,19 @@ function Hud({
             </span>
           ))}
         </div>
-        <div className="bg-black/60 text-white px-2 py-0.5 rounded text-xs font-mono flex items-center gap-1">
+        <div className="bg-black/60 text-white px-2 py-0.5 rounded-sm text-xs font-mono flex items-center gap-1">
           <span style={{ color: refueled ? "#22d04a" : "#ffd23a" }}>⛽</span>
           {refueled ? "Tanken full" : "Trenger tank"}
         </div>
         {fines > 0 && (
-          <div className="bg-black/60 text-white px-2 py-0.5 rounded text-xs font-mono">
+          <div className="bg-black/60 text-white px-2 py-0.5 rounded-sm text-xs font-mono">
             Bøter: {fines.toLocaleString("no-NO")} kr
           </div>
         )}
       </div>
       <div className="absolute top-3 right-3 flex gap-2 select-none font-mono">
         <span
-          className="px-2 py-1 rounded text-sm"
+          className="px-2 py-1 rounded-sm text-sm"
           style={{
             background: blinker === "left" ? "#ffd23a" : "#222",
             color: blinker === "left" ? "#000" : "#888",
@@ -126,7 +126,7 @@ function Hud({
           ← Q
         </span>
         <span
-          className="px-2 py-1 rounded text-sm"
+          className="px-2 py-1 rounded-sm text-sm"
           style={{
             background: blinker === "right" ? "#ffd23a" : "#222",
             color: blinker === "right" ? "#000" : "#888",
@@ -135,7 +135,7 @@ function Hud({
           W →
         </span>
       </div>
-      <div className="absolute bottom-3 right-3 text-white font-mono text-sm bg-black/60 px-2 py-1 rounded">
+      <div className="absolute bottom-3 right-3 text-white font-mono text-sm bg-black/60 px-2 py-1 rounded-sm">
         {speed} km/t
       </div>
       {!mapOpen && <div className="absolute bottom-3 left-3 text-white/70 font-mono text-xs">M for kart</div>}

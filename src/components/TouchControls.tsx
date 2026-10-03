@@ -30,7 +30,7 @@ export function TouchControls() {
       <button
         type="button"
         onClick={() => setForced((v) => !v)}
-        className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/55 text-white text-xs px-2 py-1 rounded font-mono"
+        className="absolute bottom-3 left-1/2 bg-black/55 text-white text-xs px-2 py-1 rounded-sm font-mono"
         style={{ transform: "translate(-50%, 0)", bottom: show ? 132 : 12 }}
       >
         📱 {show ? "skjul touch-knapper" : "vis touch-knapper"}
