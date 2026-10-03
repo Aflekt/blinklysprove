@@ -1,17 +1,16 @@
 // Main per-frame loop. Reads input, integrates physics, runs rules, draws.
 
-import { useEffect, useRef, useState, type RefObject } from 'react';
-import type { Player, Side } from '../types';
-import { PLAYER_START, WORLD, PARKING_AREA, BENSIN, REMA } from './world';
-import { drawWorld } from './render';
-import { drawCrashOverlay } from './render/crashOverlay';
-import { makeRulesState, tickRules, evaluateMapKey, type ToastKind } from './rules';
-import { PHYSICS, SPEED_TO_KMH, type Physics } from './physics';
-import { CAR_BY_ID, type CarConfig } from './cars';
-import { useStore } from '../state/store';
-import { POPUP_TIMING, CRASH_TOTAL_MS, pickHarmless } from './events';
-import { makeNpcs, tickNpcs } from './npcs';
-import { addFine, loseAllLives, loseLife, store } from '../state/store';
+import { type RefObject, useEffect, useRef, useState } from "react";
+import { addFine, loseAllLives, loseLife, store, useStore } from "../state/store";
+import type { Player, Side } from "../types";
+import { CAR_BY_ID, type CarConfig } from "./cars";
+import { CRASH_TOTAL_MS, POPUP_TIMING, pickHarmless } from "./events";
+import { makeNpcs, tickNpcs } from "./npcs";
+import { PHYSICS, type Physics, SPEED_TO_KMH } from "./physics";
+import { drawWorld } from "./render";
+import { drawCrashOverlay } from "./render/crashOverlay";
+import { evaluateMapKey, makeRulesState, type ToastKind, tickRules } from "./rules";
+import { BENSIN, PARKING_AREA, PLAYER_START, REMA, WORLD } from "./world";
 
 const BLINK_HZ = 2.4;
 const MAP_FINE_KR = 1_000_000;
@@ -30,15 +29,17 @@ export interface DrivingHud {
 export function useDriving(canvasRef: RefObject<HTMLCanvasElement | null>): DrivingHud {
   const [hudBlinker, setHudBlinker] = useState<Side | null>(null);
   const [hudSpeed, setHudSpeed] = useState(0);
-  const [toast, setToast] = useState<DrivingHud['toast']>(null);
+  const [toast, setToast] = useState<DrivingHud["toast"]>(null);
   const [showMap, setShowMap] = useState(false);
   const [refueled, setRefueled] = useState(false);
   const [popup, setPopup] = useState(false);
   const [harmlessMsg, setHarmlessMsg] = useState<string | null>(null);
   const [crashActive, setCrashActive] = useState(false);
 
-  const showMapRef = useRef(showMap); showMapRef.current = showMap;
-  const popupRef = useRef(popup); popupRef.current = popup;
+  const showMapRef = useRef(showMap);
+  showMapRef.current = showMap;
+  const popupRef = useRef(popup);
+  popupRef.current = popup;
   const crashStartRef = useRef<number | null>(null);
   const nextPopupAtRef = useRef<number>(0);
 
@@ -62,8 +63,9 @@ export function useDriving(canvasRef: RefObject<HTMLCanvasElement | null>): Driv
   // Schedule the first popup once the game starts.
   useEffect(() => {
     nextPopupAtRef.current =
-      performance.now() + (POPUP_TIMING.initialDelayMin + Math.random() *
-      (POPUP_TIMING.initialDelayMax - POPUP_TIMING.initialDelayMin)) * 1000;
+      performance.now() +
+      (POPUP_TIMING.initialDelayMin + Math.random() * (POPUP_TIMING.initialDelayMax - POPUP_TIMING.initialDelayMin)) *
+        1000;
   }, []);
 
   useEffect(() => {
@@ -71,25 +73,25 @@ export function useDriving(canvasRef: RefObject<HTMLCanvasElement | null>): Driv
       const k = e.key.toLowerCase();
       keys.current[k] = true;
 
-      if (crashStartRef.current != null) return;       // ignore input during animation
+      if (crashStartRef.current != null) return; // ignore input during animation
 
-      if (k === 'q') toggleBlink('left');
-      else if (k === 'w') toggleBlink('right');
-      else if (k === 'm') handleMapKey();
-      else if (k === 'l') handleReadKey();
-      else if (k === 'escape' && showMapRef.current) setShowMap(false);
+      if (k === "q") toggleBlink("left");
+      else if (k === "w") toggleBlink("right");
+      else if (k === "m") handleMapKey();
+      else if (k === "l") handleReadKey();
+      else if (k === "escape" && showMapRef.current) setShowMap(false);
 
-      if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(k)) {
+      if (["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(k)) {
         e.preventDefault();
       }
     };
-    const onUp = (e: KeyboardEvent) => { keys.current[e.key.toLowerCase()] = false; };
+    const onUp = (e: KeyboardEvent) => {
+      keys.current[e.key.toLowerCase()] = false;
+    };
 
     function toggleBlink(side: Side) {
       const p = playerRef.current;
-      const effective: Side = car.quirks?.blinkerFlipped
-        ? (side === 'left' ? 'right' : 'left')
-        : side;
+      const effective: Side = car.quirks?.blinkerFlipped ? (side === "left" ? "right" : "left") : side;
       p.blinker = p.blinker === effective ? null : effective;
       p.blinkerSetAt = performance.now();
       setHudBlinker(p.blinker);
@@ -97,11 +99,11 @@ export function useDriving(canvasRef: RefObject<HTMLCanvasElement | null>): Driv
 
     function handleMapKey() {
       const action = evaluateMapKey(playerRef.current, showMapRef.current);
-      if (action === 'open') setShowMap(true);
-      else if (action === 'close') setShowMap(false);
-      else if (action === 'fineMoving') {
+      if (action === "open") setShowMap(true);
+      else if (action === "close") setShowMap(false);
+      else if (action === "fineMoving") {
         addFine(MAP_FINE_KR);
-        flashToast('fine', `Du åpnet kartet i bevegelse. Bot: ${MAP_FINE_KR.toLocaleString('no-NO')} kr.`);
+        flashToast("fine", `Du åpnet kartet i bevegelse. Bot: ${MAP_FINE_KR.toLocaleString("no-NO")} kr.`);
       }
     }
 
@@ -111,9 +113,7 @@ export function useDriving(canvasRef: RefObject<HTMLCanvasElement | null>): Driv
       // Safe = legally parked in a real parking area. Just braking on a
       // road is *not* parking — opening the message there still kills you.
       const safe =
-        pointInRect(p.pos, PARKING_AREA) ||
-        pointInRect(p.pos, BENSIN.trigger) ||
-        pointInRect(p.pos, REMA.trigger);
+        pointInRect(p.pos, PARKING_AREA) || pointInRect(p.pos, BENSIN.trigger) || pointInRect(p.pos, REMA.trigger);
       if (!safe) {
         setPopup(false);
         crashStartRef.current = performance.now();
@@ -132,11 +132,11 @@ export function useDriving(canvasRef: RefObject<HTMLCanvasElement | null>): Driv
       return v.x >= r.x && v.x <= r.x + r.w && v.y >= r.y && v.y <= r.y + r.h;
     }
 
-    window.addEventListener('keydown', onDown);
-    window.addEventListener('keyup', onUp);
+    window.addEventListener("keydown", onDown);
+    window.addEventListener("keyup", onUp);
     return () => {
-      window.removeEventListener('keydown', onDown);
-      window.removeEventListener('keyup', onUp);
+      window.removeEventListener("keydown", onDown);
+      window.removeEventListener("keyup", onUp);
     };
   }, []);
 
@@ -148,14 +148,13 @@ export function useDriving(canvasRef: RefObject<HTMLCanvasElement | null>): Driv
 
   function scheduleNextPopup() {
     const span = POPUP_TIMING.retriggerDelayMax - POPUP_TIMING.retriggerDelayMin;
-    nextPopupAtRef.current =
-      performance.now() + (POPUP_TIMING.retriggerDelayMin + Math.random() * span) * 1000;
+    nextPopupAtRef.current = performance.now() + (POPUP_TIMING.retriggerDelayMin + Math.random() * span) * 1000;
   }
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     let raf = 0;
@@ -193,7 +192,7 @@ export function useDriving(canvasRef: RefObject<HTMLCanvasElement | null>): Driv
           if (hit) {
             const msg = `Du kjørte på en ${hit.label}!`;
             loseLife(msg);
-            flashToast('violation', msg);
+            flashToast("violation", msg);
           }
           consumeWin();
           maybeTriggerPopup(ts);
@@ -215,7 +214,7 @@ export function useDriving(canvasRef: RefObject<HTMLCanvasElement | null>): Driv
         if (elapsed >= CRASH_TOTAL_MS) {
           crashStartRef.current = null;
           setCrashActive(false);
-          loseAllLives('Du leste meldingen i bevegelse. Djevelen hentet deg ned til helvete.');
+          loseAllLives("Du leste meldingen i bevegelse. Djevelen hentet deg ned til helvete.");
         }
       }
 
@@ -233,10 +232,10 @@ export function useDriving(canvasRef: RefObject<HTMLCanvasElement | null>): Driv
   }, [canvasRef, car.body, car.roof]);
 
   function applyInput(p: Player, dt: number) {
-    const up = keys.current['arrowup'];
-    const down = keys.current['arrowdown'];
-    const left = keys.current['arrowleft'];
-    const right = keys.current['arrowright'];
+    const up = keys.current.arrowup;
+    const down = keys.current.arrowdown;
+    const left = keys.current.arrowleft;
+    const right = keys.current.arrowright;
 
     if (up) {
       if (car.quirks?.instantTopSpeed) p.speed = physics.MAX_FWD;
@@ -253,7 +252,7 @@ export function useDriving(canvasRef: RefObject<HTMLCanvasElement | null>): Driv
     const speedFactor = Math.min(1, Math.abs(p.speed) / 80);
     if (Math.abs(p.speed) > physics.TURN_MIN_SPEED) {
       const dir = Math.sign(p.speed);
-      if (left)  p.heading -= physics.TURN_RATE * speedFactor * dir * dt;
+      if (left) p.heading -= physics.TURN_RATE * speedFactor * dir * dt;
       if (right) p.heading += physics.TURN_RATE * speedFactor * dir * dt;
     }
 
@@ -263,10 +262,22 @@ export function useDriving(canvasRef: RefObject<HTMLCanvasElement | null>): Driv
 
   function clampToWorld(p: Player) {
     const m = 30;
-    if (p.pos.x < m)               { p.pos.x = m; p.speed *= 0.4; }
-    if (p.pos.x > WORLD.width - m) { p.pos.x = WORLD.width - m; p.speed *= 0.4; }
-    if (p.pos.y < m)               { p.pos.y = m; p.speed *= 0.4; }
-    if (p.pos.y > WORLD.height - m){ p.pos.y = WORLD.height - m; p.speed *= 0.4; }
+    if (p.pos.x < m) {
+      p.pos.x = m;
+      p.speed *= 0.4;
+    }
+    if (p.pos.x > WORLD.width - m) {
+      p.pos.x = WORLD.width - m;
+      p.speed *= 0.4;
+    }
+    if (p.pos.y < m) {
+      p.pos.y = m;
+      p.speed *= 0.4;
+    }
+    if (p.pos.y > WORLD.height - m) {
+      p.pos.y = WORLD.height - m;
+      p.speed *= 0.4;
+    }
   }
 
   function consumePending() {
@@ -275,16 +286,16 @@ export function useDriving(canvasRef: RefObject<HTMLCanvasElement | null>): Driv
     const { kind, msg, amount } = r.pending;
     r.pending = null;
 
-    if (kind === 'violation') loseLife(msg);
-    if (kind === 'fine' && amount) addFine(amount);
-    if (kind === 'info' && r.refueled) setRefueled(true);
+    if (kind === "violation") loseLife(msg);
+    if (kind === "fine" && amount) addFine(amount);
+    if (kind === "info" && r.refueled) setRefueled(true);
 
     flashToast(kind, msg);
   }
 
   function consumeWin() {
-    if (rulesRef.current.reachedShop && store.get().screen === 'game') {
-      store.set({ screen: 'won' });
+    if (rulesRef.current.reachedShop && store.get().screen === "game") {
+      store.set({ screen: "won" });
     }
   }
 

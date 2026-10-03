@@ -1,8 +1,8 @@
 // NPC movement + collision detection.
 
-import type { Player } from '../../types';
-import type { Npc, NpcDef } from './types';
-import { NPC_DEFS } from './data';
+import type { Player } from "../../types";
+import { NPC_DEFS } from "./data";
+import type { Npc, NpcDef } from "./types";
 
 const RESPAWN_MS = 6000;
 const HIT_RADIUS = 24;
@@ -33,7 +33,8 @@ export function tickNpcs(npcs: Npc[], player: Player, dt: number, nowMs: number)
     if (n.dead) {
       if (nowMs - n.deadAt > RESPAWN_MS) {
         const fresh = spawn(n.def);
-        n.pos = fresh.pos; n.vel = fresh.vel;
+        n.pos = fresh.pos;
+        n.vel = fresh.vel;
         n.dead = false;
         n.bobPhase = fresh.bobPhase;
       }
@@ -59,10 +60,22 @@ function move(n: Npc, dt: number, nowMs: number) {
   n.bobPhase += dt * 9;
 
   const b = n.def.bounds;
-  if (n.pos.x < b.x)         { n.pos.x = b.x;         n.vel.x = Math.abs(n.vel.x); }
-  if (n.pos.x > b.x + b.w)   { n.pos.x = b.x + b.w;   n.vel.x = -Math.abs(n.vel.x); }
-  if (n.pos.y < b.y)         { n.pos.y = b.y;         n.vel.y = Math.abs(n.vel.y); }
-  if (n.pos.y > b.y + b.h)   { n.pos.y = b.y + b.h;   n.vel.y = -Math.abs(n.vel.y); }
+  if (n.pos.x < b.x) {
+    n.pos.x = b.x;
+    n.vel.x = Math.abs(n.vel.x);
+  }
+  if (n.pos.x > b.x + b.w) {
+    n.pos.x = b.x + b.w;
+    n.vel.x = -Math.abs(n.vel.x);
+  }
+  if (n.pos.y < b.y) {
+    n.pos.y = b.y;
+    n.vel.y = Math.abs(n.vel.y);
+  }
+  if (n.pos.y > b.y + b.h) {
+    n.pos.y = b.y + b.h;
+    n.vel.y = -Math.abs(n.vel.y);
+  }
 
   // Wandering NPCs randomly change direction every couple of seconds.
   if (n.def.wandering && Math.random() < dt * 0.6) {
@@ -77,8 +90,11 @@ function move(n: Npc, dt: number, nowMs: number) {
 
 function labelFor(n: Npc): string {
   switch (n.def.kind) {
-    case 'pedestrian': return 'fotgjenger';
-    case 'cyclist':    return 'syklist';
-    case 'dog':        return 'hund';
+    case "pedestrian":
+      return "fotgjenger";
+    case "cyclist":
+      return "syklist";
+    case "dog":
+      return "hund";
   }
 }

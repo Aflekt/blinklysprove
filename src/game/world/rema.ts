@@ -1,6 +1,6 @@
 // Rema 1000 — the goal. Located south of roundabout B.
 
-import { RBT_B } from './roundabout';
+import { RBT_B } from "./roundabout";
 
 export const REMA = {
   // Building shell.

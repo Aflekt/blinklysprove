@@ -1,7 +1,7 @@
 // Bensinstasjon (gas station). The player must drive into the trigger
 // zone (under the canopy) to refuel before reaching Rema 1000.
 
-import { RBT_B } from './roundabout';
+import { RBT_B } from "./roundabout";
 
 export const BENSIN = {
   x: RBT_B.cx - 220,

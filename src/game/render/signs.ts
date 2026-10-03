@@ -1,5 +1,5 @@
-import { COLORS } from './colors';
-import { SIGNS, type Sign, type SignKind } from '../world';
+import { SIGNS, type Sign, type SignKind } from "../world";
+import { COLORS } from "./colors";
 
 export function drawSigns(ctx: CanvasRenderingContext2D, camX: number, camY: number) {
   for (const s of SIGNS) {
@@ -8,14 +8,14 @@ export function drawSigns(ctx: CanvasRenderingContext2D, camX: number, camY: num
 }
 
 const DRAWERS: Record<SignKind, (ctx: CanvasRenderingContext2D) => void> = {
-  yield:      drawYield,
+  yield: drawYield,
   roundabout: drawRoundaboutSign,
-  speed50:    drawSpeed50,
-  crosswalk:  drawCrosswalkSign,
-  oneway:     drawOneway,
-  deadend:    drawDeadend,
-  bikepath:   drawBikepath,
-  noentry:    drawNoentry,
+  speed50: drawSpeed50,
+  crosswalk: drawCrosswalkSign,
+  oneway: drawOneway,
+  deadend: drawDeadend,
+  bikepath: drawBikepath,
+  noentry: drawNoentry,
 };
 
 function drawSign(ctx: CanvasRenderingContext2D, x: number, y: number, s: Sign) {
@@ -43,7 +43,7 @@ function drawRoundaboutSign(ctx: CanvasRenderingContext2D) {
   ctx.fillStyle = COLORS.signWhite;
   triangle(ctx, 0, -10, r - 4, false);
 
-  ctx.strokeStyle = '#222';
+  ctx.strokeStyle = "#222";
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.arc(0, -10, 5, 0, Math.PI * 1.5);
@@ -53,14 +53,17 @@ function drawRoundaboutSign(ctx: CanvasRenderingContext2D) {
     { a: Math.PI / 2, ax: 0, ay: 5 },
     { a: Math.PI, ax: -5, ay: 0 },
   ];
-  ctx.fillStyle = '#222';
+  ctx.fillStyle = "#222";
   for (const ar of arrows) {
     ctx.save();
     ctx.translate(ar.ax, -10 + ar.ay);
     ctx.rotate(ar.a);
     ctx.beginPath();
-    ctx.moveTo(0, 0); ctx.lineTo(-3, -2); ctx.lineTo(-3, 2);
-    ctx.closePath(); ctx.fill();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(-3, -2);
+    ctx.lineTo(-3, 2);
+    ctx.closePath();
+    ctx.fill();
     ctx.restore();
   }
 }
@@ -68,14 +71,18 @@ function drawRoundaboutSign(ctx: CanvasRenderingContext2D) {
 function drawSpeed50(ctx: CanvasRenderingContext2D) {
   const r = 14;
   ctx.fillStyle = COLORS.signRedBg;
-  ctx.beginPath(); ctx.arc(0, -10, r, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath();
+  ctx.arc(0, -10, r, 0, Math.PI * 2);
+  ctx.fill();
   ctx.fillStyle = COLORS.signWhite;
-  ctx.beginPath(); ctx.arc(0, -10, r - 3, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = '#222';
-  ctx.font = 'bold 12px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('50', 0, -10);
+  ctx.beginPath();
+  ctx.arc(0, -10, r - 3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = "#222";
+  ctx.font = "bold 12px sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("50", 0, -10);
 }
 
 function drawCrosswalkSign(ctx: CanvasRenderingContext2D) {
@@ -83,7 +90,7 @@ function drawCrosswalkSign(ctx: CanvasRenderingContext2D) {
   ctx.fillRect(-12, -22, 24, 24);
   ctx.fillStyle = COLORS.signWhite;
   triangle(ctx, 0, -10, 9, false);
-  ctx.fillStyle = '#000';
+  ctx.fillStyle = "#000";
   ctx.fillRect(-1, -12, 2, 6);
   ctx.fillRect(-3, -7, 2, 4);
   ctx.fillRect(1, -7, 2, 4);
@@ -125,8 +132,12 @@ function drawBikepath(ctx: CanvasRenderingContext2D) {
   ctx.strokeStyle = COLORS.signWhite;
   ctx.lineWidth = 1.5;
   // Wheels.
-  ctx.beginPath(); ctx.arc(-7, -8, 4, 0, Math.PI * 2); ctx.stroke();
-  ctx.beginPath(); ctx.arc(7, -8, 4, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(-7, -8, 4, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(7, -8, 4, 0, Math.PI * 2);
+  ctx.stroke();
   // Frame.
   ctx.beginPath();
   ctx.moveTo(-7, -8);
@@ -142,7 +153,9 @@ function drawBikepath(ctx: CanvasRenderingContext2D) {
 function drawNoentry(ctx: CanvasRenderingContext2D) {
   const r = 14;
   ctx.fillStyle = COLORS.signRedBg;
-  ctx.beginPath(); ctx.arc(0, -10, r, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath();
+  ctx.arc(0, -10, r, 0, Math.PI * 2);
+  ctx.fill();
   ctx.fillStyle = COLORS.signWhite;
   ctx.fillRect(-r + 2, -12, (r - 2) * 2, 4);
 }

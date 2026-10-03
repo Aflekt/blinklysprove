@@ -1,6 +1,6 @@
-import type { Vec2 } from '../../types';
+import type { Vec2 } from "../../types";
 
-export type NpcKind = 'pedestrian' | 'cyclist' | 'dog';
+export type NpcKind = "pedestrian" | "cyclist" | "dog";
 
 export interface NpcDef {
   id: string;
@@ -8,7 +8,7 @@ export interface NpcDef {
   start: Vec2;
   velocity: Vec2;
   bounds: { x: number; y: number; w: number; h: number };
-  wandering?: boolean;   // dogs occasionally change direction inside bounds
+  wandering?: boolean; // dogs occasionally change direction inside bounds
   color?: string;
 }
 

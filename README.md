@@ -18,8 +18,8 @@ Blinklyset må ha stått på i minst tre sekunder før du svinger, og veien må 
 ## Kjør lokalt
 
 ```sh
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 React, TypeScript, Vite og Tailwind. Alt i selve kjøringen tegnes på et `<canvas>`.

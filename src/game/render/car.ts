@@ -1,5 +1,5 @@
-import { COLORS } from './colors';
-import type { Side } from '../../types';
+import type { Side } from "../../types";
+import { COLORS } from "./colors";
 
 // Draw the player car at canvas-screen coordinates (already camera-adjusted).
 export function drawCar(
@@ -19,7 +19,7 @@ export function drawCar(
   ctx.rotate(heading);
 
   // Shadow.
-  ctx.fillStyle = 'rgba(0,0,0,0.35)';
+  ctx.fillStyle = "rgba(0,0,0,0.35)";
   ctx.fillRect(-len / 2 + 3, -wid / 2 + 4, len, wid);
 
   // Body + roof + windshield.
@@ -33,10 +33,10 @@ export function drawCar(
   // Blinkers — local +x = forward, -y = driver's left, +y = right.
   const on = blinkerPhase;
   const lights: Array<[number, number, boolean]> = [
-    [len / 2 - 1, -wid / 2 + 1, on && blinker === 'left'],
-    [len / 2 - 1,  wid / 2 - 4, on && blinker === 'right'],
-    [-len / 2 - 2, -wid / 2 + 1, on && blinker === 'left'],
-    [-len / 2 - 2,  wid / 2 - 4, on && blinker === 'right'],
+    [len / 2 - 1, -wid / 2 + 1, on && blinker === "left"],
+    [len / 2 - 1, wid / 2 - 4, on && blinker === "right"],
+    [-len / 2 - 2, -wid / 2 + 1, on && blinker === "left"],
+    [-len / 2 - 2, wid / 2 - 4, on && blinker === "right"],
   ];
   for (const [x, y, lit] of lights) {
     ctx.fillStyle = lit ? COLORS.blinkerOn : COLORS.blinkerOff;

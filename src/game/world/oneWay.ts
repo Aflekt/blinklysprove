@@ -1,13 +1,16 @@
 // One-way road segments (enveiskjøring). Player driving in the opposite
 // direction inside one of these rects accumulates a violation.
 
-import { RBT_A } from './roundabout';
-import { WORLD, ROAD_W } from './constants';
+import { ROAD_W, WORLD } from "./constants";
+import { RBT_A } from "./roundabout";
 
-export type Dir = 'east' | 'west' | 'north' | 'south';
+export type Dir = "east" | "west" | "north" | "south";
 
 export interface OneWayZone {
-  x: number; y: number; w: number; h: number;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
   allowed: Dir;
 }
 
@@ -18,6 +21,6 @@ export const ONE_WAY_ZONES: OneWayZone[] = [
     y: RBT_A.cy - ROAD_W / 2,
     w: WORLD.width - (RBT_A.cx + RBT_A.outerR) - 200,
     h: ROAD_W,
-    allowed: 'east',
+    allowed: "east",
   },
 ];

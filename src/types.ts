@@ -1,6 +1,6 @@
-export type Side = 'left' | 'right';
-export type Screen = 'intro' | 'select' | 'game' | 'gameOver' | 'won';
-export type CarId = 'corolla' | 'tesla' | 'bmw' | 'volvo' | 'caddy' | 'focus';
+export type Side = "left" | "right";
+export type Screen = "intro" | "select" | "game" | "gameOver" | "won";
+export type CarId = "corolla" | "tesla" | "bmw" | "volvo" | "caddy" | "focus";
 
 export interface Vec2 {
   x: number;

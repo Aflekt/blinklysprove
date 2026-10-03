@@ -1,5 +1,5 @@
-import { COLORS } from './colors';
-import { CROSSWALKS, type Crosswalk } from '../world';
+import { CROSSWALKS, type Crosswalk } from "../world";
+import { COLORS } from "./colors";
 
 export function drawCrosswalks(ctx: CanvasRenderingContext2D, camX: number, camY: number) {
   for (const cw of CROSSWALKS) {
@@ -16,7 +16,7 @@ function drawCrosswalk(ctx: CanvasRenderingContext2D, x: number, y: number, cw: 
   ctx.fillStyle = COLORS.zebra;
   const stripe = 14;
   const gap = 10;
-  if (cw.orient === 'v') {
+  if (cw.orient === "v") {
     // Stripes run vertically, repeating along x.
     for (let dx = 4; dx < cw.w - 4; dx += stripe + gap) {
       ctx.fillRect(x + dx, y + 4, stripe, cw.h - 8);

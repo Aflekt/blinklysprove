@@ -4,8 +4,8 @@
 // Norwegian rule (Trafikkreglene § 14): a driver must signal when leaving
 // a parking spot and merging into traffic — that's enforced in rules.ts.
 
-import { RBT_A } from './roundabout';
-import { ROAD_W } from './constants';
+import { ROAD_W } from "./constants";
+import { RBT_A } from "./roundabout";
 
 export const PARKING_AREA = {
   x: RBT_A.cx + ROAD_W / 2,
