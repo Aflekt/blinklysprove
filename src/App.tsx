@@ -1,3 +1,4 @@
+import { Container } from "@/components/layout/container";
 import { Footer } from "@/components/navigation/footer";
 import { Header } from "@/components/navigation/header";
 import { CarSelectScreen } from "@/components/prove/car-select-screen";
@@ -38,13 +39,13 @@ export function App() {
   return (
     <>
       <Header />
-      <main className="max-w-5xl mx-auto px-8 py-8">
+      <Container as="main" className="py-8">
         {screen === "intro" && <IntroScreen onStart={handleStart} />}
         {screen === "select" && <CarSelectScreen onPick={handlePickCar} />}
         {screen === "game" && <GameScreen />}
         {screen === "gameOver" && <GameOverScreen onRestart={handleRestart} />}
         {screen === "won" && <WonScreen onRestart={handleRestart} />}
-      </main>
+      </Container>
       <Footer />
     </>
   );

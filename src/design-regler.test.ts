@@ -7,9 +7,6 @@ import { describe, expect, it } from "vitest";
 const SRC = join(process.cwd(), "src");
 
 const UNNTAK: string[] = [
-  // Bilvalget og HUD-en over spillet har fargene fra canvas-tegningen direkte (bilfarger, blinklys).
-  "components/prove/car-select-screen.tsx",
-  "components/prove/game-screen.tsx",
   // Selve kjøringen tegnes på canvas. Fargene der er ikke CSS og kan ikke bruke tokens.
   "game/cars/bmw.ts",
   "game/cars/caddy.ts",

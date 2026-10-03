@@ -20,6 +20,18 @@
   --success: #2d6a4f;
   --border: #e3e3e3;
   --ring: #444f55;
+  /* Hover på knappene */
+  --primary-strong: #2f3a40;
+  /* Kanten rundt popupen med «1 ulest melding» */
+  --destructive-strong: #7a0a1c;
+
+  /* HUD-en oppå kjøringen. Samme farger som blinklys og lys på canvas (src/game/render/colors.ts) */
+  --hud-heart: #ff3344;
+  --hud-heart-lost: #444;
+  --hud-blink-on: #ffd23a;
+  --hud-key: #222;
+  --hud-key-foreground: #888;
+  --hud-fuel-ok: #22d04a;
 }
 
 /* Mørk modus støttes ikke. */
@@ -37,6 +49,17 @@
   --color-success: var(--success);
   --color-border: var(--border);
   --color-ring: var(--ring);
+  --color-primary-strong: var(--primary-strong);
+  --color-destructive-strong: var(--destructive-strong);
+  --color-hud-heart: var(--hud-heart);
+  --color-hud-heart-lost: var(--hud-heart-lost);
+  --color-hud-blink-on: var(--hud-blink-on);
+  --color-hud-key: var(--hud-key);
+  --color-hud-key-foreground: var(--hud-key-foreground);
+  --color-hud-fuel-ok: var(--hud-fuel-ok);
+
+  /* Høyden på spillflata */
+  --spacing-game: 640px;
 
   --font-sans: "LFT Etica", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   --font-display: var(--font-sans);

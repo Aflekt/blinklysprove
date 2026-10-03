@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { Button } from "@/components/base/button";
+import { Input, Label } from "@/components/base/input";
+import { Card, Lead } from "@/components/ui/card";
 
 interface Props {
   onStart(name: string): void;
@@ -7,12 +10,12 @@ interface Props {
 export function IntroScreen({ onStart }: Props) {
   const [name, setName] = useState("");
   return (
-    <div className="vv-card">
+    <Card>
       <h2>Obligatorisk blinklysprøve</h2>
-      <p className="vv-lead">
+      <Lead>
         Alle førere av motorvogn er pålagt å gjennomføre en sertifisert blinklysprøve i henhold til forskrift om
         førerkompetanse §3-1.
-      </p>
+      </Lead>
       <p>
         Prøven består av ti (10) standardiserte kjøresituasjoner. Kandidaten skal demonstrere korrekt bruk av
         retningsangivere i henhold til vegtrafikkloven §11. Manglende beståelse kan medføre revurdering av førerkortets
@@ -20,12 +23,9 @@ export function IntroScreen({ onStart }: Props) {
       </p>
 
       <h3>Personalia</h3>
-      <label className="vv-form-label" htmlFor="playerName">
-        Fullt navn
-      </label>
-      <input
+      <Label htmlFor="playerName">Fullt navn</Label>
+      <Input
         id="playerName"
-        className="vv-input"
         placeholder="Skriv inn fullt navn"
         maxLength={40}
         value={name}
@@ -33,10 +33,8 @@ export function IntroScreen({ onStart }: Props) {
       />
 
       <div className="mt-6">
-        <button type="button" className="vv-btn" onClick={() => onStart(name.trim())}>
-          Start blinklysprøven
-        </button>
+        <Button onClick={() => onStart(name.trim())}>Start blinklysprøven</Button>
       </div>
-    </div>
+    </Card>
   );
 }
