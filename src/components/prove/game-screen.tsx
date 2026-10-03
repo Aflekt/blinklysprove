@@ -1,9 +1,9 @@
 import { useRef } from "react";
-import { POPUP_BODY, POPUP_HEADER } from "../game/events";
-import type { ToastKind } from "../game/rules";
-import { useDriving } from "../game/useDriving";
-import { useStore } from "../state/store";
-import { TouchControls } from "./TouchControls";
+import { TouchControls } from "@/components/prove/touch-controls";
+import { POPUP_BODY, POPUP_HEADER } from "@/game/events";
+import type { ToastKind } from "@/game/rules";
+import { useDriving } from "@/game/useDriving";
+import { useStore } from "@/state/store";
 
 export function GameScreen() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -14,7 +14,7 @@ export function GameScreen() {
 
   return (
     <div className="vv-card overflow-hidden p-0">
-      <div className="bg-vv-text text-white px-6 py-3 flex justify-between items-center gap-4 flex-wrap text-sm">
+      <div className="bg-primary text-white px-6 py-3 flex justify-between items-center gap-4 flex-wrap text-sm">
         <div>
           Fører: <b>{playerName}</b>
         </div>
@@ -22,7 +22,7 @@ export function GameScreen() {
           Piltaster · <b>Q</b>/<b>W</b> blink · <b>M</b> kart · <b>L</b> les melding
         </div>
       </div>
-      <div className="relative bg-black w-full h-[640px] border border-vv-border">
+      <div className="relative bg-black w-full h-[640px] border border-border">
         <canvas ref={canvasRef} className="w-full h-full block" tabIndex={0} />
         {!crashActive && (
           <Hud lives={lives} fines={fines} blinker={blinker} speed={speed} mapOpen={showMap} refueled={refueled} />
@@ -70,12 +70,12 @@ function PopupNotification() {
 function HarmlessSheet({ msg }: { msg: string }) {
   return (
     <div
-      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white text-vv-text border-2 border-vv-text rounded-lg shadow-2xl px-6 py-5 max-w-md"
+      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white text-foreground border-2 border-primary rounded-lg shadow-2xl px-6 py-5 max-w-md"
       style={{ zIndex: 20 }}
     >
-      <div className="text-xs uppercase tracking-wider text-vv-text-soft mb-2">📱 Innboks</div>
+      <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">📱 Innboks</div>
       <div className="text-base">{msg}</div>
-      <div className="text-xs text-vv-text-soft mt-3">Lukk: vent et øyeblikk…</div>
+      <div className="text-xs text-muted-foreground mt-3">Lukk: vent et øyeblikk…</div>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useStore } from "../state/store";
+import { useStore } from "@/state/store";
 
 interface Props {
   onRestart(): void;

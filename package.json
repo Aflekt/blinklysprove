@@ -13,9 +13,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "clsx": "2.1.1",
     "html2canvas": "1.4.1",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "tailwind-merge": "3.6.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",

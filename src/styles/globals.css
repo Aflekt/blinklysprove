@@ -1,18 +1,5 @@
 @import "tailwindcss";
-
-@theme {
-  --color-vv-text: #444f55;
-  --color-vv-text-soft: #6b757a;
-  --color-vv-cream: #fff5e6;
-  --color-vv-light: #f5f5f5;
-  --color-vv-border: #e3e3e3;
-  --color-vv-danger: #c8102e;
-  --color-vv-danger-soft: #fbe9ec;
-  --color-vv-success: #2d6a4f;
-
-  --font-vv: "LFT Etica", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  --font-mono: "Courier New", Consolas, monospace;
-}
+@import "./tokens.css";
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
@@ -41,22 +28,22 @@
 @utility vv-card {
   @apply bg-white mb-9;
   & h2 {
-    @apply text-3xl font-normal text-vv-text mb-4 leading-tight;
+    @apply text-3xl font-normal text-foreground mb-4 leading-tight;
   }
   & h3 {
-    @apply text-xl font-bold text-vv-text mt-7 mb-2;
+    @apply text-xl font-bold text-foreground mt-7 mb-2;
   }
   & p {
-    @apply mb-4 text-base leading-relaxed text-vv-text;
+    @apply mb-4 text-base leading-relaxed text-foreground;
   }
 }
 
 @utility vv-lead {
-  @apply text-lg text-vv-text mb-5 leading-relaxed;
+  @apply text-lg text-foreground mb-5 leading-relaxed;
 }
 
 @utility vv-btn {
-  @apply inline-block bg-vv-text text-white border-2 border-vv-text px-8 py-3.5 font-bold cursor-pointer rounded-xs mr-1 mt-1.5 transition-colors;
+  @apply inline-block bg-primary text-white border-2 border-primary px-8 py-3.5 font-bold cursor-pointer rounded-xs mr-1 mt-1.5 transition-colors;
   font-family: inherit;
   &:hover {
     @apply bg-[#2f3a40] border-[#2f3a40];
@@ -67,40 +54,40 @@
 }
 
 @utility vv-btn-secondary {
-  @apply bg-white text-vv-text border-2 border-vv-text;
+  @apply bg-white text-foreground border-2 border-primary;
   &:hover {
-    @apply bg-vv-light text-vv-text;
+    @apply bg-muted text-foreground;
   }
 }
 
 @utility vv-input {
-  @apply border border-gray-400 px-4 py-3.5 text-base text-vv-text w-full max-w-md rounded-xs bg-white;
+  @apply border border-gray-400 px-4 py-3.5 text-base text-foreground w-full max-w-md rounded-xs bg-white;
   font-family: inherit;
   &:focus {
-    @apply outline-solid outline-2 outline-vv-text border-vv-text;
+    @apply outline-solid outline-2 outline-primary border-primary;
   }
 }
 
 @utility vv-form-label {
-  @apply block font-bold text-sm text-vv-text mt-5 mb-2;
+  @apply block font-bold text-sm text-foreground mt-5 mb-2;
 }
 
 @utility info-box {
-  @apply bg-vv-light border-l-4 border-vv-text px-5 py-4 my-5 text-sm leading-relaxed;
+  @apply bg-muted border-l-4 border-primary px-5 py-4 my-5 text-sm leading-relaxed;
 }
 
 @utility info-box-danger {
-  @apply bg-vv-danger-soft border-l-vv-danger;
+  @apply bg-destructive-soft border-l-destructive;
 }
 
 @utility absurd-block {
-  @apply text-xl my-4 text-vv-text leading-relaxed py-5 px-6 bg-vv-cream border-l-4 border-vv-text;
+  @apply text-xl my-4 text-foreground leading-relaxed py-5 px-6 bg-accent border-l-4 border-primary;
 }
 
 @layer base {
   html,
   body {
-    @apply font-vv text-vv-text bg-white antialiased;
+    @apply font-sans text-foreground bg-white antialiased;
     font-size: 16px;
     line-height: 1.5;
   }

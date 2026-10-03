@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { CARS, type CarConfig } from "../game/cars";
-import type { CarId } from "../types";
+import { CARS, type CarConfig } from "@/game/cars";
+import type { CarId } from "@/types";
 
 interface Props {
   onPick(id: CarId): void;
@@ -24,14 +24,14 @@ export function CarSelectScreen({ onPick }: Props) {
             onClick={() => onPick(c.id)}
             onMouseEnter={() => setHover(c.id)}
             onMouseLeave={() => setHover(null)}
-            className="text-left border-2 border-vv-border rounded-sm p-4 bg-white hover:border-vv-text transition-colors"
+            className="text-left border-2 border-border rounded-sm p-4 bg-white hover:border-primary transition-colors"
             style={{
               boxShadow: hover === c.id ? "0 0 0 3px #444f55" : "none",
             }}
           >
             <CarPreview car={c} />
-            <div className="font-bold text-vv-text mt-3">{c.name}</div>
-            <div className="text-sm text-vv-text-soft mt-1">{c.blurb}</div>
+            <div className="font-bold text-foreground mt-3">{c.name}</div>
+            <div className="text-sm text-muted-foreground mt-1">{c.blurb}</div>
             <Tags car={c} />
           </button>
         ))}
@@ -42,7 +42,7 @@ export function CarSelectScreen({ onPick }: Props) {
 
 function CarPreview({ car }: { car: CarConfig }) {
   return (
-    <div className="h-20 flex items-center justify-center bg-vv-light rounded-sm">
+    <div className="h-20 flex items-center justify-center bg-muted rounded-sm">
       <svg width="76" height="46" viewBox="-38 -22 76 44" aria-hidden="true">
         <rect x="-19" y="-11" width="38" height="22" fill={car.body} stroke="#222" strokeWidth="1" />
         <rect x="-11" y="-8" width="22" height="16" fill={car.roof} />
@@ -63,7 +63,7 @@ function Tags({ car }: { car: CarConfig }) {
   return (
     <div className="flex flex-wrap gap-1 mt-2">
       {tags.map((t) => (
-        <span key={t} className="text-xs px-2 py-0.5 bg-vv-cream border border-vv-border rounded-sm">
+        <span key={t} className="text-xs px-2 py-0.5 bg-accent border border-border rounded-sm">
           {t}
         </span>
       ))}

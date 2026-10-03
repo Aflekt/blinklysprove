@@ -1,13 +1,13 @@
-import { CarSelectScreen } from "./components/CarSelectScreen";
-import { Footer } from "./components/Footer";
-import { GameOverScreen } from "./components/GameOverScreen";
-import { GameScreen } from "./components/GameScreen";
-import { Header } from "./components/Header";
-import { IntroScreen } from "./components/IntroScreen";
-import { WonScreen } from "./components/WonScreen";
-import { CAR_BY_ID } from "./game/cars";
-import { store, useStore } from "./state/store";
-import type { CarId } from "./types";
+import { Footer } from "@/components/navigation/footer";
+import { Header } from "@/components/navigation/header";
+import { CarSelectScreen } from "@/components/prove/car-select-screen";
+import { GameOverScreen } from "@/components/prove/game-over-screen";
+import { GameScreen } from "@/components/prove/game-screen";
+import { IntroScreen } from "@/components/prove/intro-screen";
+import { WonScreen } from "@/components/prove/won-screen";
+import { CAR_BY_ID } from "@/game/cars";
+import { store, useStore } from "@/state/store";
+import type { CarId } from "@/types";
 
 export function App() {
   const screen = useStore((s) => s.screen);
